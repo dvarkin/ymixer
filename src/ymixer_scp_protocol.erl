@@ -1,0 +1,25 @@
+-module(ymixer_scp_protocol).
+
+-export([channel_on/1, channel_off/1, channel_to_mix_off/2, channel_to_mix_on/2, status/0]).
+
+
+mixer_api(Command = [_|_], Arg) ->
+    StrCommand = io_lib:format(Command, Arg),
+    binary:list_to_binary(StrCommand).
+
+status() ->
+    mixer_api("devstatus productname", []).
+
+channel_on(ChannelNumber) ->
+    mixer_api("set MIXER:Current/InCh/Fader/On ~p 0 1", [ChannelNumber]).
+   
+
+channel_off(ChannelNumber) ->
+    mixer_api("set MIXER:Current/InCh/Fader/On ~p 0 0", [ChannelNumber]).
+
+channel_to_mix_on(ChannelNumber, Mix) ->
+    mixer_api("MIXER:Current/InCh/ToMix/On ~p ~p 1", [ChannelNumber, Mix]).
+
+channel_to_mix_off(ChannelNumber, Mix) ->
+    mixer_api("MIXER:Current/InCh/ToMix/On ~p ~p 0", [ChannelNumber, Mix]).
+
