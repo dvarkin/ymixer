@@ -7,4 +7,6 @@ dep_cowboy_commit = 2.2.0
 
 DEP_PLUGINS = cowboy
 
+EUNIT_OPTS = verbose
+
 include erlang.mk

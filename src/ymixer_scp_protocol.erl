@@ -1,6 +1,12 @@
 -module(ymixer_scp_protocol).
 
--export([channel_on/1, channel_off/1, channel_to_mix_off/2, channel_to_mix_on/2, status/0]).
+-ifdef(debug).
+-define(LOG(X), io:format("{~p,~p}: ~p~n", [?MODULE,?LINE,X])).
+-else.
+-define(LOG(X), true).
+-endif.
+
+-export([channel_on/1, channel_off/1, channel_to_mix_off/2, channel_to_mix_on/2, status/0, mixer_api/2]).
 
 
 
@@ -9,6 +15,7 @@ string_format(Pattern, Values) ->
 
 mixer_api(Command = [_|_], Args) when is_list(Args) ->
     StrCommand = string_format(Command, Args),
+    io:format(StrCommand),
     erlang:list_to_binary(StrCommand).
 
 status() ->
@@ -16,7 +23,6 @@ status() ->
 
 channel_on(ChannelNumber) ->
     mixer_api("set MIXER:Current/InCh/Fader/On ~p 0 1", [ChannelNumber]).
-   
 
 channel_off(ChannelNumber) ->
     mixer_api("set MIXER:Current/InCh/Fader/On ~p 0 0", [ChannelNumber]).
