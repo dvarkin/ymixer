@@ -3,9 +3,13 @@
 -export([channel_on/1, channel_off/1, channel_to_mix_off/2, channel_to_mix_on/2, status/0]).
 
 
-mixer_api(Command = [_|_], Arg) ->
-    StrCommand = io_lib:format(Command, Arg),
-    binary:list_to_binary(StrCommand).
+
+string_format(Pattern, Values) ->
+    lists:flatten(io_lib:format(Pattern, Values)).
+
+mixer_api(Command = [_|_], Args) when is_list(Args) ->
+    StrCommand = string_format(Command, Args),
+    erlang:list_to_binary(StrCommand).
 
 status() ->
     mixer_api("devstatus productname", []).
