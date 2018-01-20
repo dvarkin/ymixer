@@ -1,0 +1,12 @@
+Dependencies
+
+node 9.4.0
+npm 5.6.0
+elm 0.18.0
+
+
+Build
+npm run build
+
+Dev
+npm run dev

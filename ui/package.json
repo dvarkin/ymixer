@@ -1,0 +1,21 @@
+{
+  "name": "ui",
+  "version": "1.0.0",
+  "description": "UI for ymixer",
+  "repository": "https://github.com/dvarkin/ymixer.git",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack",
+    "dev": "webpack-dev-server --port 3000 --host 0.0.0.0",
+    "clean": "del-cli dist/*"
+  },
+  "author": "",
+  "license": "ISC",
+  "devDependencies": {
+    "del-cli": "^1.1.0",
+    "elm-webpack-loader": "^4.4.0",
+    "file-loader": "^1.1.6",
+    "webpack": "^3.10.0",
+    "webpack-dev-server": "^2.11.0"
+  }
+}
