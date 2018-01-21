@@ -1,6 +1,6 @@
 module View exposing (..)
 
-import Html exposing (Html, div, text, h1)
+import Html exposing (Html, div, text, h5)
 import Html.Attributes exposing (style)
 import Models exposing (..)
 import Msgs exposing (..)
@@ -18,7 +18,7 @@ view model =
       model.mdl 
       [ Layout.fixedHeader
       ]
-      { header = [ h1 [ style [ ( "padding", "2rem" ) ]] [ text "YMixer" ]]
+      { header = [ h5 [ style [ ( "padding", "2rem" ) ]] [ text "YMixer" ]]
       , drawer = []
       , tabs = ( [], [] )
       , main = [ viewBody model ]

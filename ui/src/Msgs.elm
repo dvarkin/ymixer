@@ -11,5 +11,6 @@ type Msg
   | OnFetchChannels (WebData (List Channel))
   | OnLocationChange Location
   | Mdl (Material.Msg Msg)
+  | NewUrl String
 
 
