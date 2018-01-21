@@ -1,5 +1,8 @@
 module Msgs exposing (..)
 
+import RemoteData exposing (WebData)
+import Models exposing (Mix)
 
-type Msg = NoOp
+type Msg = 
+  OnFetchMixes (WebData (List Mix))
 

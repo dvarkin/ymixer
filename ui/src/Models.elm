@@ -1,13 +1,17 @@
 module Models exposing (..)
 
+import RemoteData exposing (WebData)
+
 
 type alias Model =
-  String
+  { mixes : WebData (List Mix)
+  }
 
 
 initialModel : Model 
 initialModel =
-  "initial model"
+  { mixes = RemoteData.Loading
+  }
 
 
 type alias ImageUrl =
@@ -33,10 +37,6 @@ type alias Channel =
   , status : ChannelStatus
   , image : ImageUrl
   }
-
-
-type alias Channels =
-  List Channel 
 
 
 type alias MixId =

@@ -1,9 +1,11 @@
 module View exposing (..)
 
-import Html exposing (Html, div, text)
+import Html exposing (Html)
 import Models exposing (..)
 import Msgs exposing (..)
+import Views.MixList as MixList
+
 
 view : Model -> Html Msg
 view model =
-  div [] [ text model ]
+  MixList.view model

@@ -2,14 +2,17 @@ module Main exposing (..)
 
 import Html exposing (program)
 import Models exposing (Model, initialModel)
-import View exposing (view)
+import Msgs exposing (Msg)
 import Update exposing (update)
-import Msgs exposing (..)
+import View exposing (view)
+import Commands exposing (fetchMixes)
+
 
 
 init : ( Model, Cmd Msg )
 init =
-  ( initialModel, Cmd.none )
+  ( initialModel, fetchMixes )
+
 
 main : Program Never Model Msg
 main =
