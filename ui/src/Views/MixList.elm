@@ -19,7 +19,7 @@ view model =
   Grid.grid [] 
   [ Grid.cell 
     [ Grid.size Grid.Tablet 8, Grid.size Grid.Desktop 5 ]
-    [ Options.styled Html.h4 [ Typography.headline ] [ text "Mix list" ]
+    [ Options.styled Html.h4 [ Typography.headline ] [ text "Mixes" ]
     , maybeList model.mixes
     ]
   ]
@@ -63,16 +63,5 @@ mixEntry mix =
       [ text mix.name ]
     ]
     
-
-mixBtn : MixId -> Html Msg 
-mixBtn id =
-  let
-    path =
-      mixPath id
-      
-  in
-    a [ href path ] [ text "Open" ]
-
-
 
 

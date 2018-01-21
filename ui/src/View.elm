@@ -18,7 +18,8 @@ view model =
       model.mdl 
       [ Layout.fixedHeader
       ]
-      { header = [ h5 [ style [ ( "padding", "2rem" ) ]] [ text "YMixer" ]]
+      { header = [ Layout.row [] 
+                    [ Layout.title [] [ text "Mixer" ]] ]
       , drawer = []
       , tabs = ( [], [] )
       , main = [ viewBody model ]

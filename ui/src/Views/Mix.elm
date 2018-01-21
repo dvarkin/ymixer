@@ -1,19 +1,27 @@
 module Views.Mix exposing (..)
 
 import Html exposing (Html, div, text, ul, li)
-import Models exposing (Model, Channel, ChannelId)
+import Models exposing (Model, Mdl, Channel, ChannelId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import List.Extra
+import Material.List as Lists
+import Material.Options as Options exposing (css)
+import Material.Color as Color
+import Material.Typography as Typography
+import Material.Grid as Grid
+import Material.Toggles as Toggles
 
 
 view : Model -> Html Msg
 view model =
-  div []
+  Grid.grid [] 
+  [ Grid.cell 
+    [ Grid.size Grid.Tablet 8, Grid.size Grid.Desktop 5 ]
     [ mixInfo model
-    , maybeList model.channels
+    , maybeList model
     ]
-
+  ]
 
 mixInfo : Model -> Html Msg 
 mixInfo model =
@@ -23,7 +31,9 @@ mixInfo model =
         RemoteData.Success mixes ->
           case List.Extra.find (\mix -> mix.id == mixId) mixes of
             Just mix ->
-              div [] [ text ("mix: id = " ++ (toString mix))]
+              Options.styled Html.h4 
+                [ Typography.headline ] 
+                [ text mix.name ]
 
             Nothing ->
               div [] [ text "can't find mix" ] 
@@ -35,9 +45,9 @@ mixInfo model =
       div [] [ text "mix is not defined" ]    
 
 
-maybeList : WebData (List Channel) -> Html Msg
-maybeList response =
-  case response of
+maybeList : Model -> Html Msg
+maybeList model =
+  case model.channels of
     RemoteData.NotAsked ->
       div [] [ text "Not asked for channels" ]
 
@@ -48,20 +58,26 @@ maybeList response =
       div [] [ text (toString error) ]
 
     RemoteData.Success channels ->
-      list channels
+      list model.mdl channels
 
 
-list : List Channel -> Html Msg
-list channels =
-  ul [] (List.map channelEntry channels)
+list : Mdl -> List Channel -> Html Msg
+list mdl channels  =
+  Lists.ul [] (List.map (channelEntry mdl) channels)
 
 
-channelEntry : Channel -> Html Msg 
-channelEntry channel =
-  li [] [ text ("channel: id = " 
-    ++ (toString channel.id) 
-    ++ " name = " 
-    ++ channel.name
-    ++ " on = "
-    ++ (toString channel.on)) ]
-
+channelEntry : Mdl -> Channel -> Html Msg 
+channelEntry mdl ch =
+  Lists.li [ Lists.withSubtitle ] 
+    [ Lists.content 
+      []
+      [ Lists.avatarImage ch.image []
+      , text ch.name
+      , Lists.subtitle [] [ text ("Channel #" ++ toString ch.id) ]
+      ]
+    , Lists.content2 []
+        [ Toggles.switch Msgs.Mdl [0] mdl
+          [ Toggles.value ch.on]
+          []
+        ]
+    ]

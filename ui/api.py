@@ -50,37 +50,37 @@ def mix(id):
       "id":1,
       "name":"Ch1",
       "on":False,
-      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+      "image":"https://api.adorable.io/avatars/285/channel-1.png"
     },
     {
       "id":2,
       "name":"Ch2",
       "on":False,
-      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+      "image":"https://api.adorable.io/avatars/285/channel-2.png"
     },
     {
       "id":3,
       "name":"Ch3",
       "on":False,
-      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+      "image":"https://api.adorable.io/avatars/285/channel-3.png"
     },
     {
       "id":4,
       "name":"Ch4",
       "on":False,
-      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+      "image":"https://api.adorable.io/avatars/285/channel-4.png"
     },
     {
       "id":5,
       "name":"Ch5",
       "on":False,
-      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+      "image":"https://api.adorable.io/avatars/285/channel-5.png"
     },
     {
       "id":6,
       "name":"Ch6",
       "on":False,
-      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+      "image":"https://api.adorable.io/avatars/285/channel-6.png"
     }
   ])
 
