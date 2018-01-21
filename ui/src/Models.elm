@@ -50,10 +50,5 @@ type alias MixName =
 type alias Mix =
   { id : MixId 
   , name : String
-  , channels : Channels
   }
-
-
-type alias Mixes =
-  List Mix 
 

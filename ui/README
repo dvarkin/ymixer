@@ -10,3 +10,6 @@ npm run build
 
 Dev
 npm run dev
+
+Static sever port 3000
+API server port 4000
