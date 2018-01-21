@@ -1,6 +1,7 @@
 module Models exposing (..)
 
 import RemoteData exposing (WebData)
+import Material
 
 
 type Route 
@@ -9,11 +10,16 @@ type Route
   | NotFoundRoute
 
 
+type alias Mdl =
+  Material.Model
+
+
 type alias Model =
   { mixes : WebData (List Mix)
   , mix : Maybe MixId
   , channels : WebData (List Channel)
   , route : Route
+  , mdl : Mdl
   }
 
 
@@ -23,6 +29,7 @@ initialModel route mix =
   , mix = mix
   , channels = RemoteData.NotAsked
   , route = route
+  , mdl = Material.model
   }
 
 
