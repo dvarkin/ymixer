@@ -1,10 +1,11 @@
 module Views.MixList exposing (..)
 
-import Html exposing (Html, div, text, ul, li)
-import Models exposing (Model, Mix)
+import Html exposing (Html, div, text, ul, li, a)
+import Html.Attributes exposing (href)
+import Models exposing (Model, Mix, MixId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
-
+import Router exposing (mixPath)
 
 view : Model -> Html Msg
 view model =
@@ -36,6 +37,22 @@ list mixes =
 mixEntry : Mix -> Html Msg 
 mixEntry mix =
   li []
-    [ text ((toString mix.id) ++ ": " ++ mix.name) ]
+    [div [] 
+      [ text ((toString mix.id) ++ ": " ++ mix.name) 
+      , mixBtn mix.id
+      ]
+    ]
+    
+
+mixBtn : MixId -> Html Msg 
+mixBtn id =
+  let
+    path =
+      mixPath id
+      
+  in
+    a [ href path ] [ text "Open" ]
+
+
 
 

@@ -3,14 +3,22 @@ module Models exposing (..)
 import RemoteData exposing (WebData)
 
 
+type Route 
+  = MixesRoute
+  | MixRoute MixId
+  | NotFoundRoute
+
+
 type alias Model =
   { mixes : WebData (List Mix)
+  ,  route : Route
   }
 
 
-initialModel : Model 
-initialModel =
+initialModel : Route -> Model 
+initialModel route = 
   { mixes = RemoteData.Loading
+  , route = route
   }
 
 
