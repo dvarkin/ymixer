@@ -6,7 +6,7 @@ import Models exposing (..)
 import Msgs exposing (..)
 import Views.MixList as MixList
 import Views.Mix as Mix
-import Material
+--import Material
 import Material.Scheme
 import Material.Layout as Layout
 import Material.Color as Color

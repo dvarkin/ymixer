@@ -2,7 +2,7 @@ module Msgs exposing (..)
 
 import RemoteData exposing (WebData)
 import Navigation exposing (Location)
-import Models exposing (Mix, Channel)
+import Models exposing (Mix, Channel, ChannelId)
 import Material 
 
 
@@ -12,5 +12,6 @@ type Msg
   | OnLocationChange Location
   | Mdl (Material.Msg Msg)
   | NewUrl String
+  | SetChannel ( ChannelId, Bool )
 
 

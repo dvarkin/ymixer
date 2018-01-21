@@ -77,7 +77,9 @@ channelEntry mdl ch =
       ]
     , Lists.content2 []
         [ Toggles.switch Msgs.Mdl [0] mdl
-          [ Toggles.value ch.on]
+          [ Toggles.value ch.on
+          , Options.onToggle (Msgs.SetChannel (ch.id, not ch.on))
+          ]
           []
         ]
     ]
