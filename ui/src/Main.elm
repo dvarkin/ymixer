@@ -1,10 +1,10 @@
 module Main exposing (..)
 
-import Models exposing (Model, initialModel)
+import Models exposing (Model, Route(..), initialModel)
 import Msgs exposing (Msg)
 import Update exposing (update)
 import View exposing (view)
-import Commands exposing (fetchMixes)
+import Commands exposing (fetchMixes, fetchChannels)
 import Navigation exposing (Location)
 import Router
 
@@ -13,9 +13,17 @@ init : Location -> ( Model, Cmd Msg )
 init location =
   let 
     currentRoute =
-      Router.parseLocation location
+      Router.parseLocation location      
   in
-    ( initialModel currentRoute, fetchMixes )
+    case currentRoute of
+      MixesRoute ->
+        (initialModel currentRoute Nothing) ! [ fetchMixes ]
+
+      MixRoute id ->
+        (initialModel currentRoute (Just id)) ! [ fetchMixes, fetchChannels id]
+
+      _ ->
+        (initialModel currentRoute Nothing) ! []
 
 
 main : Program Never Model Msg

@@ -11,13 +11,17 @@ type Route
 
 type alias Model =
   { mixes : WebData (List Mix)
-  ,  route : Route
+  , mix : Maybe MixId
+  , channels : WebData (List Channel)
+  , route : Route
   }
 
 
-initialModel : Route -> Model 
-initialModel route = 
+initialModel : Route -> Maybe MixId -> Model 
+initialModel route mix = 
   { mixes = RemoteData.Loading
+  , mix = mix
+  , channels = RemoteData.NotAsked
   , route = route
   }
 
@@ -30,9 +34,9 @@ type alias ChannelId =
   Int
 
 
-type ChannelStatus 
-  = On 
-  | Off
+--type ChannelStatus 
+--  = On 
+--  | Off
 
 
 type alias ChannelName =
@@ -42,7 +46,7 @@ type alias ChannelName =
 type alias Channel =
   { id : ChannelId
   , name : ChannelName
-  , status : ChannelStatus
+  , on : Bool
   , image : ImageUrl
   }
 

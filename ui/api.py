@@ -42,6 +42,48 @@ def mixes():
       }
     ])
 
+    
+@app.route('/api/mixes/<id>')
+def mix(id):
+  return jsonify([
+    {
+      "id":1,
+      "name":"Ch1",
+      "on":False,
+      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+    },
+    {
+      "id":2,
+      "name":"Ch2",
+      "on":False,
+      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+    },
+    {
+      "id":3,
+      "name":"Ch3",
+      "on":False,
+      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+    },
+    {
+      "id":4,
+      "name":"Ch4",
+      "on":False,
+      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+    },
+    {
+      "id":5,
+      "name":"Ch5",
+      "on":False,
+      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+    },
+    {
+      "id":6,
+      "name":"Ch6",
+      "on":False,
+      "image":"https://cdn1.iconfinder.com/data/icons/logotypes/32/chrome-512.png"
+    }
+  ])
+
 
 if __name__ == '__main__':
     logging.basicConfig(

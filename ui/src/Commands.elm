@@ -4,7 +4,7 @@ import Http
 import Json.Decode as Decode 
 import Json.Decode.Pipeline exposing (decode, required)
 import RemoteData
-import Models exposing (Mix)
+import Models exposing (Mix, MixId, Channel)
 import Msgs exposing (..)
 
 
@@ -30,5 +30,34 @@ mixDecoder =
   decode Mix
     |> required "id" Decode.int
     |> required "name" Decode.string 
+
+
+fetchChannels : MixId -> Cmd Msg
+fetchChannels id =
+  Http.get (fetchChannelsUrl id) channelsDecoder
+    |> RemoteData.sendRequest
+    |> Cmd.map OnFetchChannels
+
+
+fetchChannelsUrl : MixId -> String 
+fetchChannelsUrl id =
+  "/api/mixes/" ++ (toString id)
+
+
+channelsDecoder : Decode.Decoder (List Channel)
+channelsDecoder =
+  Decode.list channelDecoder 
+
+
+channelDecoder : Decode.Decoder Channel
+channelDecoder =
+  decode Channel 
+    |> required "id" Decode.int
+    |> required "name" Decode.string
+    |> required "on" Decode.bool
+    |> required "image" Decode.string
+
+
+
 
 
