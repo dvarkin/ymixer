@@ -4,6 +4,7 @@ import Html exposing (Html, div, text, ul, li)
 import Models exposing (Model, Channel, ChannelId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
+import List.Extra
 
 
 view : Model -> Html Msg
@@ -17,8 +18,18 @@ view model =
 mixInfo : Model -> Html Msg 
 mixInfo model =
   case model.mix of
-    Just mix ->
-      div [] [ text ("mix: id = " ++ (toString mix))]
+    Just mixId ->
+      case model.mixes of
+        RemoteData.Success mixes ->
+          case List.Extra.find (\mix -> mix.id == mixId) mixes of
+            Just mix ->
+              div [] [ text ("mix: id = " ++ (toString mix))]
+
+            Nothing ->
+              div [] [ text "can't find mix" ] 
+
+        _ ->
+          div [] [ text "can't get mixes" ]   
     
     Nothing ->
       div [] [ text "mix is not defined" ]    
