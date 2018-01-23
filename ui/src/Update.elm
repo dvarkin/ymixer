@@ -60,7 +60,9 @@ updateChannel id on chans =
     replaceChan chans chan =
       List.Extra.replaceIf (\ch -> ch.id == id) chan chans
   in
-    List.Extra.find (\ch -> ch.id == id) chans
+    chans
+      |> List.Extra.find (\ch -> ch.id == id)
       |> Maybe.map (\ch -> { ch | on = on })
       |> Maybe.map (replaceChan chans)
       |> Maybe.withDefault chans
+
