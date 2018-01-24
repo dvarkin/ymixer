@@ -16,7 +16,3 @@ send(Host, PortNo, Message) ->
     A = gen_tcp:recv(Sock,0),
     gen_tcp:close(Sock),
     A.
-
-
-%test() ->
-%    [send({172,16,45,45}, ymixer_scp_protocol:channel_level())]    , <<"set MIXER:Current/InCh/Fader/On 0 0 1\n">>).
