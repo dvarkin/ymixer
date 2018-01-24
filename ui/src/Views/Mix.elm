@@ -17,7 +17,10 @@ view : Model -> Html Msg
 view model =
   Grid.grid [] 
   [ Grid.cell 
-    [ Grid.size Grid.Tablet 8, Grid.size Grid.Desktop 5 ]
+    [ Grid.size Grid.Desktop 12
+    , Grid.size Grid.Tablet 8
+    , Grid.size Grid.Phone 4 
+    ]
     [ mixInfo model
     , maybeList model
     ]

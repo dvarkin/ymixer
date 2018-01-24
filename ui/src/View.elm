@@ -6,7 +6,7 @@ import Models exposing (..)
 import Msgs exposing (..)
 import Views.MixList as MixList
 import Views.Mix as Mix
---import Material
+import Views.Channels as Channels
 import Material.Scheme
 import Material.Layout as Layout
 import Material.Color as Color
@@ -17,11 +17,14 @@ view model =
     Layout.render Mdl 
       model.mdl 
       [ Layout.fixedHeader
+      , Layout.selectedTab 0
       ]
       { header = [ Layout.row [] 
                     [ Layout.title [] [ text "Mixer" ]] ]
       , drawer = []
-      , tabs = ( [], [] )
+      , tabs = ( [ text "Control", text "Manage" ]
+               , [ Color.background (Color.color Color.Teal Color.S400) ] 
+               )
       , main = [ viewBody model ]
       }
 
@@ -33,7 +36,7 @@ viewBody model =
       MixList.view model 
 
     Models.MixRoute id ->
-      Mix.view model
+      Channels.view model
       --div [] [ text (toString id) ]
 
     Models.NotFoundRoute ->

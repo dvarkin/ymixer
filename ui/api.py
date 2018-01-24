@@ -45,44 +45,15 @@ def mixes():
     
 @app.route('/api/mixes/<id>')
 def mix(id):
-  return jsonify([
-    {
-      "id":1,
-      "name":"Ch1",
+  def chan(id):
+    return {
+      "id": id,
+      "name": "Ch-{}".format(id),
       "on":False,
-      "image":"https://api.adorable.io/avatars/285/channel-1.png"
-    },
-    {
-      "id":2,
-      "name":"Ch2",
-      "on":False,
-      "image":"https://api.adorable.io/avatars/285/channel-2.png"
-    },
-    {
-      "id":3,
-      "name":"Ch3",
-      "on":False,
-      "image":"https://api.adorable.io/avatars/285/channel-3.png"
-    },
-    {
-      "id":4,
-      "name":"Ch4",
-      "on":False,
-      "image":"https://api.adorable.io/avatars/285/channel-4.png"
-    },
-    {
-      "id":5,
-      "name":"Ch5",
-      "on":False,
-      "image":"https://api.adorable.io/avatars/285/channel-5.png"
-    },
-    {
-      "id":6,
-      "name":"Ch6",
-      "on":False,
-      "image":"https://api.adorable.io/avatars/285/channel-6.png"
+      "image": "https://api.adorable.io/avatars/285/channel-{}.png".format(id)
     }
-  ])
+  
+  return jsonify([chan(id) for id in range(0, 48)])
 
 
 if __name__ == '__main__':

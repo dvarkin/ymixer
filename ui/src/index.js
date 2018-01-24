@@ -8,4 +8,5 @@ var mountNode = document.getElementById('root');
 
 // .embed() can take an optional second argument
 var app = Elm.Main.embed(mountNode);
-
+// var app = Elm.Main.fullscreen();
+// var app = Elm.Main.worker();
