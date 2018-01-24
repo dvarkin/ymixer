@@ -5,7 +5,8 @@ PROJECT_VERSION = 0.0.1
 DEPS = cowboy
 dep_cowboy_commit = 2.2.0
 
-DEP_PLUGINS = cowboy
+DEP_PLUGINS = cowboy, reload_mk
+BUILD_DEPS = reload_mk
 
 EUNIT_OPTS = verbose
 
