@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Models exposing (Model, Route(..), Mdl, ChannelId)
+import Models exposing (Model, Route(..), Mdl, ChannelId, Channel)
 import Msgs exposing (Msg(..))
 import Router exposing (parseLocation)
 import Commands exposing (fetchChannels)
@@ -25,7 +25,10 @@ update msg model =
       { model | channels = response } ! []
 
     SetChannel ( ch, on ) ->
-      (updateChannel model ch on) ! []
+      let 
+        newChannes = RemoteData.map (updateChannel ch on) model.channels
+      in 
+        { model | channels = newChannes } ! []
 
     OnLocationChange location ->
       let 
@@ -51,70 +54,13 @@ update msg model =
         { model | route = newRoute, mix = newMix } ! cmds
 
 
-updateChannel : Model -> ChannelId -> Bool -> Model
-updateChannel model id on =
-  case model.channels of
-    RemoteData.Success channels ->
-      case List.Extra.find (\ch -> ch.id == id) channels of 
-        Just chan ->
-          let
-            updatedChan = 
-              { chan | on = on }
-
-            pick currentChan =
-              if currentChan.id == updatedChan.id then
-                updatedChan
-              else
-                currentChan
-
-            updateChanList channels =
-              List.map pick channels
-
-            newChannels =
-              RemoteData.map updateChanList model.channels
-
-          in
-            { model | channels = newChannels }
-        _ ->
-          model
-    _ ->
-      model 
-
-
---updatePlayer : Model -> Player -> Model
---updatePlayer model updatedPlayer =
---  let
---    pick currentPlayer =
---      if updatedPlayer.id == currentPlayer.id then
---        updatedPlayer
---      else
---        currentPlayer
-      
---    updatePlayerList players =
---      List.map pick players 
-
---    updatedPlayers =
---      RemoteData.map updatePlayerList model.players
---  in
---    { model | players = updatedPlayers }
-
---mixInfo model =
---  case model.mix of
---    Just mixId ->
---      case model.mixes of
---        RemoteData.Success mixes ->
---          case List.Extra.find (\mix -> mix.id == mixId) mixes of
---            Just mix ->
---              Options.styled Html.h4 
---                [ Typography.headline ] 
---                [ text mix.name ]
-
---            Nothing ->
---              div [] [ text "can't find mix" ] 
-
---        _ ->
---          div [] [ text "can't get mixes" ]   
-    
---    Nothing ->
---      div [] [ text "mix is not defined" ]    
-
+updateChannel : ChannelId -> Bool -> List Channel -> List Channel
+updateChannel id on chans =
+  let 
+    replaceChan chans chan =
+      List.Extra.replaceIf (\ch -> ch.id == id) chan chans
+  in
+    List.Extra.find (\ch -> ch.id == id) chans
+      |> Maybe.map (\ch -> { ch | on = on })
+      |> Maybe.map (replaceChan chans)
+      |> Maybe.withDefault chans
