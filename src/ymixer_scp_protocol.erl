@@ -11,10 +11,19 @@
          response_channel_mix_state/1,
          set_channel_mix_level/3, 
          get_channel_mix_level/2,
+         set_channel_mix_level_on/2,
+         set_channel_mix_level_off/2,
          response_channel_mix_level/1
         ]).
 
 %%% MIX API
+
+set_channel_mix_level_off(ChannelNumber, Mix) ->
+    set_channel_mix_level(ChannelNumber, Mix, -32768).
+
+
+set_channel_mix_level_on(ChannelNumber, Mix) ->
+    set_channel_mix_level(ChannelNumber, Mix, 0).
 
 
 set_channel_mix_level(ChannelNumber, Mix, Level) ->
@@ -35,8 +44,10 @@ response_channel_mix_level(Response) ->
 get_channel_mix_state(ChannelNumber, Mix) ->
     mixer_api("get MIXER:Current/InCh/ToMix/On ~p ~p 0\n",[ChannelNumber, Mix]).
 
+
 set_channel_mix_state(ChannelNumber, Mix, OnOff) when OnOff == 0 orelse OnOff == 1 ->
     mixer_api("set MIXER:Current/InCh/ToMix/On ~p ~p ~p\n",[ChannelNumber, Mix, OnOff]).
+
 
 response_channel_mix_state(Response) ->
     <<"OK get MIXER:Current/InCh/ToMix/On ", BinResponse/bitstring>>  = Response, 
