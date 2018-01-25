@@ -48,7 +48,6 @@ def mix(id):
   def chan(id):
     return {
       "id": id,
-      "name": "Ch-{}".format(id),
       "on":False,
       "image": "https://api.adorable.io/avatars/285/channel-{}.png".format(id)
     }

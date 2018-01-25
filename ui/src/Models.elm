@@ -21,6 +21,7 @@ type alias Model =
   , route : Route
   , mdl : Mdl
   , cardSize : Int 
+  , selectedTab : Int
   }
 
 
@@ -32,6 +33,7 @@ initialModel route mix =
   , route = route
   , mdl = Material.model
   , cardSize = 150
+  , selectedTab = 0
   }
 
 
@@ -54,7 +56,6 @@ type alias ChannelName =
 
 type alias Channel =
   { id : ChannelId
-  , name : ChannelName
   , on : Bool
   , image : ImageUrl
   }

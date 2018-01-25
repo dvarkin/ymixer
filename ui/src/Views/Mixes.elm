@@ -6,7 +6,6 @@ import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Material.Options as Options exposing (css)
 import Material.Color as Color
-import Material.Typography as Typography
 import Material.Grid as Grid
 import Material.Card as Card 
 import Router
@@ -69,7 +68,7 @@ mixCard {mdl, cardSize} {id} =
       , css "height" ((toString cardSize) ++ "px")
       , css "margin" "5px"
       , Color.background (Color.color Color.Teal Color.S500)
-      , Options.onClick (Msgs.NewUrl (Router.mixPath id))
+      , Options.onClick (Router.gotoMix id)
       ]
       [ Card.title [] [ Card.head [ Color.text Color.white ] [ text title ] ]
       --, Card.text

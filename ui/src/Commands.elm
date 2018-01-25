@@ -53,7 +53,6 @@ channelDecoder : Decode.Decoder Channel
 channelDecoder =
   decode Channel 
     |> required "id" Decode.int
-    |> required "name" Decode.string
     |> required "on" Decode.bool
     |> required "image" Decode.string
 
