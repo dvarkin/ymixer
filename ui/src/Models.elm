@@ -21,7 +21,7 @@ type alias Model =
   , route : Route
   , mdl : Mdl
   , cardSize : Int 
-  , selectedTab : Int
+  , editPhotos : Bool
   }
 
 
@@ -33,7 +33,7 @@ initialModel route mix =
   , route = route
   , mdl = Material.model
   , cardSize = 150
-  , selectedTab = 0
+  , editPhotos = False
   }
 
 

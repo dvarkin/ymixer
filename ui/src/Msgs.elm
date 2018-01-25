@@ -16,6 +16,6 @@ type Msg
   | SetChannel ( ChannelId, Bool )
   | ChangeCardSize Int
   | KeyMsg Keyboard.KeyCode
-  | SelectTab Int
+  | EditPhotos
 
 

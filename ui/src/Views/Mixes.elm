@@ -9,6 +9,7 @@ import Material.Color as Color
 import Material.Grid as Grid
 import Material.Card as Card 
 import Material.Button as Button
+import Material.Menu as Menu
 import Router
 
 view : Model -> Html Msg
@@ -69,7 +70,11 @@ mixCard {mdl, cardSize} {id} =
       , Color.background (Color.color Color.Teal Color.S500)
       , Options.onClick (Router.gotoMix id)
       ]
-      [ Card.title [] [ Card.head [ Color.text Color.white ] [ text title ] ]
+      [ Card.title [] 
+        [ Card.head 
+          [ Color.text Color.white ] 
+          [ text title ] 
+        ]
       , Card.text [ Card.expand ]  [] -- Filler
       , Card.actions
           [ Card.border
@@ -85,4 +90,3 @@ mixCard {mdl, cardSize} {id} =
               [ text "Off all"]
           ]
       ]
-

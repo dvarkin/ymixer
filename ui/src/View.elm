@@ -15,50 +15,51 @@ import Router
 view : Model -> Html Msg 
 view model = 
   let
-    title =
+    (title, navigation) =
       case model.mix of
         Just id ->
-          "Mix " ++ toString id
+          ( "Mix " ++ toString id, [ editPhotosNavidation ] )
 
         Nothing ->
-          "Mixer"
+          ( "Mixer", [] )
   in   
     Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
       Layout.render Mdl 
         model.mdl 
         [ Layout.fixedHeader
-        , Layout.selectedTab model.selectedTab
-        , Layout.onSelectTab Msgs.SelectTab
         ]
         { header = [ Layout.row [] 
                       [ Layout.title 
-                        [ Options.onClick (Router.gotoMixes)] 
-                        [ text title ]] ]
+                          [ Options.onClick (Router.gotoMixes)] 
+                          [ text title ]
+                      , Layout.spacer
+                      , Layout.navigation [] navigation
+                      ]
+                    ]
         , drawer = []
-        , tabs = ( [ text "Control", text "Manage" ]
-                 , [ Color.background (Color.color Color.Teal Color.S400) ] 
-                 )
+        , tabs = ( [], [] )
         , main = [ viewBody model ]
         }
 
 
 viewBody : Model -> Html Msg 
-viewBody ({ route, selectedTab } as model) =
-  case ( route, selectedTab ) of
-    ( _, 1 ) ->
-      ManChans.view model
-
-    ( Models.MixesRoute, 0 ) ->
+viewBody ({ route, editPhotos } as model) =
+  case ( route, editPhotos ) of
+    ( Models.MixesRoute, _ ) ->
       Mixes.view model 
 
-    ( Models.MixRoute id, 0 ) ->
+    ( Models.MixRoute id, False ) ->
       Channels.view model
+
+    ( Models.MixRoute id, True ) ->
+      ManChans.view model 
 
     ( Models.NotFoundRoute, _ ) ->
       div [] [ text "not found" ]
 
-    ( _, _ ) ->
-      div [] [ text "not found combination" ]
 
-
-
+editPhotosNavidation : Html Msg
+editPhotosNavidation = 
+  Layout.link
+    [ Options.onClick Msgs.EditPhotos] 
+    [ text "Edit photos" ]
