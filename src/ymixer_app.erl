@@ -6,7 +6,9 @@
 
 start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([
-        {'_', [{"/api/mixes/:mix_id/channels", rest_handler, []}]}
+        {'_', [{"/api/mix/:mix_id/channels", ymixer_rest_mix, []},
+               {"/api/mixes", ymixer_rest_mixes, []}]}
+
     ]),
     {ok, _} = cowboy:start_clear(my_http_listener,
         [{port, 8080}],
