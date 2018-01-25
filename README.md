@@ -64,4 +64,6 @@ Response JSON:
   {"on":false,"image":"https://api.adorable.io/avatars/285/channel-1.png","id":1},
   {"on":false,"image":"https://api.adorable.io/avatars/285/channel-1.png","id":2}]`
 
+## Switch channel Of/Off
 
+`curl -i -H "Content-type: application/json" -X POST  localhost:8080/api/channel/switch/0/3/on`
