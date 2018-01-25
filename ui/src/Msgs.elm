@@ -2,14 +2,15 @@ module Msgs exposing (..)
 
 import RemoteData exposing (WebData)
 import Navigation exposing (Location)
-import Models exposing (Mix, Channel, ChannelId)
+import Models exposing (MixId, Channel, ChannelId)
 import Material 
 import Keyboard
 
 type Msg 
-  = OnFetchMixes (WebData (List Mix))
+  = OnFetchMixes (WebData (List MixId))
   | OnFetchChannels (WebData (List Channel))
   | OnLocationChange Location
+  | TurnMixOff MixId
   | Mdl (Material.Msg Msg)
   | NewUrl String
   | SetChannel ( ChannelId, Bool )

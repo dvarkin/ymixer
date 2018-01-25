@@ -9,6 +9,7 @@ import Material.Color as Color
 import Material.Typography as Typography
 import Material.Grid as Grid
 import Material.Card as Card 
+import Material.Progress as Loading
 
 view : Model -> Html Msg
 view model =
@@ -29,7 +30,8 @@ maybeDashboard model =
       div [] [ text "Not asked for channels" ]
 
     RemoteData.Loading ->
-      div [] [ text "Loading channels..." ]
+      div [] []
+      --Loading.indeterminate
 
     RemoteData.Failure error ->
       div [] [ text (toString error) ]

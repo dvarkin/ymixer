@@ -8,6 +8,7 @@ import Material.Options as Options exposing (css)
 import Material.Color as Color
 import Material.Grid as Grid
 import Material.Card as Card 
+import Material.Button as Button
 import Router
 
 view : Model -> Html Msg
@@ -29,7 +30,7 @@ maybeDashboard model =
       div [] [ text "Not asked for mixes" ]
 
     RemoteData.Loading ->
-      div [] [ text "Loading mixes..." ]
+      div [] []
 
     RemoteData.Failure error ->
       div [] [ text (toString error) ]
@@ -46,9 +47,7 @@ dashboard model mixes =
     ]
     [ Options.div 
         [ css "display" "flex"
-        --, css "flex-flow" "row wrap"
         , css "flex-wrap" "wrap"
-        --, css "justify-content" "space-between"
         , css "align-items" "flex-start"
         , css "width" "100%"
         ]
@@ -71,12 +70,19 @@ mixCard {mdl, cardSize} {id} =
       , Options.onClick (Router.gotoMix id)
       ]
       [ Card.title [] [ Card.head [ Color.text Color.white ] [ text title ] ]
-      --, Card.text
-      --    [ css "background" "rgba(0, 0, 0, 0.5)" ] -- Non-gradient scrim
-      --    [ Options.span
-      --        [ Color.text Color.white
-      --        , Typography.contrast 1.0 ]
-      --        [ text title ]
-      --    ]
+      , Card.text [ Card.expand ]  [] -- Filler
+      , Card.actions
+          [ Card.border
+          , Options.center
+          , Color.text Color.white
+          ]
+          [ Button.render Msgs.Mdl [0] mdl
+              [ Button.colored
+              , Button.raised
+              , Color.background (Color.color Color.Teal Color.S400)
+              , Options.onClick (Msgs.TurnMixOff id)
+              ]
+              [ text "Off all"]
+          ]
       ]
 

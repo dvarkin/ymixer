@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Models exposing (Model, Route(..), Mdl, ChannelId, Channel)
+import Models exposing (Model, Mix, Route(..), Mdl, ChannelId, Channel)
 import Msgs exposing (Msg(..))
 import Router exposing (parseLocation)
 import Commands exposing (fetchChannels)
@@ -23,8 +23,19 @@ update msg model =
     NewUrl newUrl ->
       model ! [ Navigation.newUrl newUrl ]
 
+    TurnMixOff id ->
+      let
+      -- must send command
+        _ = Debug.log "turn off mix" id 
+      in
+        model ! []
+
     OnFetchMixes response ->
-      { model | mixes = response } ! []
+      let
+        mixes =
+          RemoteData.map (\ids -> List.map (\id -> Mix id) ids) response
+      in
+        { model | mixes = mixes } ! []
 
     OnFetchChannels response ->
       { model | channels = response } ! []
@@ -74,11 +85,23 @@ update msg model =
 
             _ ->
               Nothing
+
+        newChannels =
+          case newRoute of 
+            MixesRoute ->
+              RemoteData.NotAsked
+
+            MixRoute _ ->
+              RemoteData.Loading
+
+            _ ->
+              model.channels
       in
         { model 
           | route = newRoute
           , mix = newMix
           , selectedTab = 0 
+          , channels = newChannels
         } ! cmds
 
 
