@@ -8,7 +8,7 @@
 %%%-------------------------------------------------------------------
 -module(ymixer_api).
 
--export([mixes/0, mix_channels_state/3]).
+-export([mixes/0, mix_channels_state/3, mix_turn_off/3]).
 
 mixes() ->
     application:get_env(ymixer, mixes).
@@ -23,5 +23,17 @@ mix_channels_state(MixerIP, Mix, Channels) ->
     States = [ymixer_scp_protocol:response_channel_mix_state(R) || R <- RawResponseState],
   
     lists:zipwith(fun maps:merge/2, Volumes, States).
+
+mix_turn_off(Ip, MixID, Channels) ->
+    [channel_mix_turn_off(Ip, MixID, Channel) || Channel <- Channels].
+
+channel_mix_turn_off(Ip, MixID, Channel) ->
+    OnCmd = ymixer_scp_protocol:set_channel_mix_state(Channel, MixID, 1),
+    VolCmd = ymixer_scp_protocol:set_channel_mix_level_off(Channel, MixID),
+    ymixer_tcp:send(Ip, OnCmd),
+    ymixer_tcp:send(Ip, VolCmd).
+    
+
+    
     
 
