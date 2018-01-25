@@ -7,7 +7,7 @@ import View exposing (view)
 import Commands exposing (fetchMixes, fetchChannels)
 import Navigation exposing (Location)
 import Router
-
+import Keyboard
 
 init : Location -> ( Model, Cmd Msg )
 init location =
@@ -26,11 +26,16 @@ init location =
         (initialModel currentRoute Nothing) ! []
 
 
+subscriptions : Model -> Sub Msg
+subscriptions model =
+  Keyboard.downs Msgs.KeyMsg
+
+
 main : Program Never Model Msg
 main =
   Navigation.program Msgs.OnLocationChange
     { init = init
     , view = view 
     , update = update 
-    , subscriptions = always Sub.none
+    , subscriptions = subscriptions
     }

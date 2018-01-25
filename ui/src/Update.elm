@@ -8,6 +8,8 @@ import Material
 import Navigation
 import RemoteData
 import List.Extra 
+import Debug
+
 
 update : Msg -> Model -> ( Model, Cmd Msg )
 update msg model =
@@ -29,6 +31,25 @@ update msg model =
         newChannes = RemoteData.map (updateChannel ch on) model.channels
       in 
         { model | channels = newChannes } ! []
+
+    ChangeCardSize howMuch ->
+      let
+        _ = Debug.log "howMuch" howMuch
+        _ = Debug.log "newSize" model.cardSize + howMuch
+      in
+        model ! [ Cmd.none ]
+
+    KeyMsg code ->
+      case code of 
+        187 -> -- '=' inc
+          { model | cardSize = model.cardSize + 5 } ! [ Cmd.none ]
+
+        189 -> -- '-' dec
+          { model | cardSize = model.cardSize - 5 } ! [ Cmd.none ]
+
+        _ ->
+          model ! [ Cmd.none ]
+          
 
     OnLocationChange location ->
       let 

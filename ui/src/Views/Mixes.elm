@@ -1,7 +1,7 @@
-module Views.Channels exposing (..)
+module Views.Mixes exposing (..)
 
 import Html exposing (Html, div, text, ul, li)
-import Models exposing (Model, Mdl, Channel, ChannelId)
+import Models exposing (Model, Mdl, Mix, MixId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Material.Options as Options exposing (css)
@@ -9,6 +9,7 @@ import Material.Color as Color
 import Material.Typography as Typography
 import Material.Grid as Grid
 import Material.Card as Card 
+import Router
 
 view : Model -> Html Msg
 view model =
@@ -24,22 +25,22 @@ view model =
 
 maybeDashboard : Model -> Html Msg
 maybeDashboard model =
-  case model.channels of
+  case model.mixes of
     RemoteData.NotAsked ->
-      div [] [ text "Not asked for channels" ]
+      div [] [ text "Not asked for mixes" ]
 
     RemoteData.Loading ->
-      div [] [ text "Loading channels..." ]
+      div [] [ text "Loading mixes..." ]
 
     RemoteData.Failure error ->
       div [] [ text (toString error) ]
 
-    RemoteData.Success channels ->
-      dashboard model channels
+    RemoteData.Success mixes ->
+      dashboard model mixes
 
 
-dashboard : Model -> (List Channel) -> Html Msg 
-dashboard model chans =
+dashboard : Model -> (List Mix) -> Html Msg 
+dashboard model mixes =
   Options.div
     [ Options.center
     , css "width" "100%"
@@ -52,36 +53,31 @@ dashboard model chans =
         , css "align-items" "flex-start"
         , css "width" "100%"
         ]
-        (List.map (chanCard model) chans)
+        (List.map (mixCard model) mixes)
     ]
 
 
 
-chanCard : Model -> Channel -> Html Msg 
-chanCard {mdl, cardSize} {id, image, on} = 
+mixCard : Model -> Mix -> Html Msg 
+mixCard {mdl, cardSize} {id} = 
   let
-    (title, color) =
-      case on of
-        True ->
-          ( "On", Color.color Color.Green Color.A400 )
-        False ->
-          ( "Off", Color.color Color.Grey Color.S600 )
+    title = 
+      "Mix " ++ toString id
   in    
     Card.view
       [ css "width" ((toString cardSize) ++ "px")
       , css "height" ((toString cardSize) ++ "px")
       , css "margin" "5px"
-      , css "background" ("url('" ++ image ++ "') center / cover")
-      , Options.onClick (Msgs.SetChannel (id, not on))
+      , Color.background (Color.color Color.Teal Color.S500)
+      , Options.onClick (Msgs.NewUrl (Router.mixPath id))
       ]
-      [ Card.text [ Card.expand ] [] -- Filler
-      , Card.text
-          [ css "background" "rgba(0, 0, 0, 0.2)" ] -- Non-gradient scrim
-          [ Options.span
-              [ Color.text color
-              --, Typography.left
-              , Typography.contrast 1.0 ]
-              [ text title ]
-          ]
+      [ Card.title [] [ Card.head [ Color.text Color.white ] [ text title ] ]
+      --, Card.text
+      --    [ css "background" "rgba(0, 0, 0, 0.5)" ] -- Non-gradient scrim
+      --    [ Options.span
+      --        [ Color.text Color.white
+      --        , Typography.contrast 1.0 ]
+      --        [ text title ]
+      --    ]
       ]
 

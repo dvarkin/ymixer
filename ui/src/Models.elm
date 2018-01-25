@@ -20,6 +20,7 @@ type alias Model =
   , channels : WebData (List Channel)
   , route : Route
   , mdl : Mdl
+  , cardSize : Int 
   }
 
 
@@ -30,6 +31,7 @@ initialModel route mix =
   , channels = RemoteData.NotAsked
   , route = route
   , mdl = Material.model
+  , cardSize = 150
   }
 
 
