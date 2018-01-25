@@ -31,7 +31,7 @@ content_types_accepted(Req, State) ->
 resource_exists(Req, State) ->
     MixIdBinary = cowboy_req:binding(mix_id, Req),
     case list_to_integer(binary_to_list(MixIdBinary)) of
-        MixID when MixID >= 0 andalso MixID =< 5 ->
+        MixID when MixID >= 0  ->
             {true, Req, State#{mix_id => MixID}};
         _MixID ->
             {false, Req, State}
@@ -54,8 +54,8 @@ mix_handler(<<"GET">>, Req,  #{mix_id := MixID, mixer_ip := Ip, channels := Chan
 
 mix_handler(<<"POST">>, Req, #{mix_id := MixID, mixer_ip := Ip, channels := Channels} = State) ->
     ymixer_api:mix_turn_off(Ip, MixID, Channels),
-    Body = cowboy_req:set_resp_body(<<"ok">>, Req),
-    {true, Body, State};
+    Req1 = cowboy_req:set_resp_body(<<"ok">>, Req),
+    {true, Req1, State};
 
 mix_handler(_, _Req,  _State) ->
     false.
