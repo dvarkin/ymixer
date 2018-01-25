@@ -8,7 +8,6 @@
 -export([resource_exists/2]).
 
 init(Req, Opts) ->
-    io:format("init opts ~p", [Opts]),
     {ok, Ip} = application:get_env(ymixer, mixer_ip),
     {ok, Channels} = application:get_env(ymixer, channels),
     {cowboy_rest, Req, #{mixer_ip => Ip, channels => Channels}}.
@@ -35,7 +34,10 @@ resource_exists(Req, State) ->
 
 
 mix_channels(Req, #{mix_id := MixID, mixer_ip := Ip, channels := Channels } = State) ->
-    
     MixChannels = ymixer_api:mix_channels_state(Ip, MixID, Channels),
-    Body = jiffy:encode(MixChannels),
+    ReMap = [#{<<"id">> => Channel, <<"on">> => true_false(Off)} || #{<<"channel">> := Channel, <<"state">> := Off} <- MixChannels],
+    Body = jiffy:encode(ReMap),
     {Body, Req, State}.
+
+true_false(1) -> true;
+true_false(_) -> false.

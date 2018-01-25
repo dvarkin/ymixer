@@ -6,7 +6,7 @@
 
 start(_Type, _Args) ->
     Dispatch = cowboy_router:compile([
-        {'_', [{"/api/mix/:mix_id/channels", ymixer_rest_mix, []},
+        {'_', [{"/api/mix/:mix_id", ymixer_rest_mix, []},
                {"/api/mixes", ymixer_rest_mixes, []}]}
 
     ]),
