@@ -38,7 +38,7 @@ response_channel_mix_level(Response) ->
     <<"OK get MIXER:Current/InCh/ToMix/Level ", BinResponse/bitstring>>  = Response, 
     Cutted = mixer_parse_response(BinResponse),
     [Channel, Mix, Volume] = [list_to_integer(binary_to_list(B)) || B <- Cutted],
-    #{channel => Channel, mix => Mix, volume => Volume}.
+    #{<<"channel">> => Channel, <<"mix">> => Mix, <<"volume">> => Volume}.
 
 
 get_channel_mix_state(ChannelNumber, Mix) ->
@@ -53,7 +53,7 @@ response_channel_mix_state(Response) ->
     <<"OK get MIXER:Current/InCh/ToMix/On ", BinResponse/bitstring>>  = Response, 
     Cutted = mixer_parse_response(BinResponse),
     [Channel, Mix, Volume] = [list_to_integer(binary_to_list(B)) || B <- Cutted],
-    #{channel => Channel, mix => Mix, state => Volume}.
+    #{<<"channel">> => Channel, <<"mix">> => Mix, <<"state">> => Volume}.
 
 %%% non api functions
 
