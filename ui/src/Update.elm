@@ -17,6 +17,9 @@ update msg model =
     Mdl msg_ ->
       Material.update Mdl msg_ model
 
+    SelectTab tab ->
+      { model | selectedTab = tab } ! []
+
     NewUrl newUrl ->
       model ! [ Navigation.newUrl newUrl ]
 
@@ -42,13 +45,13 @@ update msg model =
     KeyMsg code ->
       case code of 
         187 -> -- '=' inc
-          { model | cardSize = model.cardSize + 5 } ! [ Cmd.none ]
+          { model | cardSize = model.cardSize + 5 } ! []
 
         189 -> -- '-' dec
-          { model | cardSize = model.cardSize - 5 } ! [ Cmd.none ]
+          { model | cardSize = model.cardSize - 5 } ! []
 
         _ ->
-          model ! [ Cmd.none ]
+          model ! []
           
 
     OnLocationChange location ->
@@ -72,7 +75,11 @@ update msg model =
             _ ->
               Nothing
       in
-        { model | route = newRoute, mix = newMix } ! cmds
+        { model 
+          | route = newRoute
+          , mix = newMix
+          , selectedTab = 0 
+        } ! cmds
 
 
 updateChannel : ChannelId -> Bool -> List Channel -> List Channel

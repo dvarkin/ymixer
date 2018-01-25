@@ -1,14 +1,14 @@
-module Views.Mixes exposing (..)
+module Views.ManageChannels exposing (..)
 
 import Html exposing (Html, div, text, ul, li)
-import Models exposing (Model, Mdl, Mix, MixId)
+import Models exposing (Model, Mdl, Channel, ChannelId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Material.Options as Options exposing (css)
 import Material.Color as Color
+import Material.Typography as Typography
 import Material.Grid as Grid
 import Material.Card as Card 
-import Router
 
 view : Model -> Html Msg
 view model =
@@ -24,22 +24,22 @@ view model =
 
 maybeDashboard : Model -> Html Msg
 maybeDashboard model =
-  case model.mixes of
+  case model.channels of
     RemoteData.NotAsked ->
-      div [] [ text "Not asked for mixes" ]
+      div [] [ text "Not asked for channels" ]
 
     RemoteData.Loading ->
-      div [] [ text "Loading mixes..." ]
+      div [] [ text "Loading channels..." ]
 
     RemoteData.Failure error ->
       div [] [ text (toString error) ]
 
-    RemoteData.Success mixes ->
-      dashboard model mixes
+    RemoteData.Success channels ->
+      dashboard model channels
 
 
-dashboard : Model -> (List Mix) -> Html Msg 
-dashboard model mixes =
+dashboard : Model -> (List Channel) -> Html Msg 
+dashboard model chans =
   Options.div
     [ Options.center
     , css "width" "100%"
@@ -52,31 +52,32 @@ dashboard model mixes =
         , css "align-items" "flex-start"
         , css "width" "100%"
         ]
-        (List.map (mixCard model) mixes)
+        (List.map (chanCard model) chans)
     ]
 
 
 
-mixCard : Model -> Mix -> Html Msg 
-mixCard {mdl, cardSize} {id} = 
+chanCard : Model -> Channel -> Html Msg 
+chanCard {mdl, cardSize} {id, image, on} = 
   let
-    title = 
-      "Mix " ++ toString id
+    title =
+      "Upload"
   in    
     Card.view
       [ css "width" ((toString cardSize) ++ "px")
       , css "height" ((toString cardSize) ++ "px")
       , css "margin" "5px"
-      , Color.background (Color.color Color.Teal Color.S500)
-      , Options.onClick (Router.gotoMix id)
+      , css "background" ("url('" ++ image ++ "') center / cover")
+      --, Options.onClick (Msgs.SetChannel (id, not on))
       ]
-      [ Card.title [] [ Card.head [ Color.text Color.white ] [ text title ] ]
-      --, Card.text
-      --    [ css "background" "rgba(0, 0, 0, 0.5)" ] -- Non-gradient scrim
-      --    [ Options.span
-      --        [ Color.text Color.white
-      --        , Typography.contrast 1.0 ]
-      --        [ text title ]
-      --    ]
+      [ Card.text [ Card.expand ] [] -- Filler
+      , Card.text
+          [ css "background" "rgba(0, 0, 0, 0.5)" ]
+          [ Options.span
+              [ Color.text Color.white
+              --, Typography.left
+              , Typography.contrast 1.0 ]
+              [ text "Upload" ]
+          ]
       ]
 

@@ -1,56 +1,55 @@
 module View exposing (..)
 
 import Html exposing (Html, div, text, h5)
---import Html.Attributes exposing (style)
 import Models exposing (..)
 import Msgs exposing (..)
-import Views.MixList as MixList
---import Views.Mix as Mix
 import Views.Mixes as Mixes
 import Views.Channels as Channels
+import Views.ManageChannels as ManChans
 import Material.Scheme
 import Material.Layout as Layout
 import Material.Color as Color
+import Material.Options as Options
+import Router
 
 view : Model -> Html Msg 
-view model =
-  let
-    tabs =
-      case model.mix of
-        Just _ ->
-          ( [ text "Control", text "Manage" ]
-          , [ Color.background (Color.color Color.Teal Color.S400) ] 
-          )
-
-        Nothing ->
-          ( [], [] )
-  in    
-    Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
-      Layout.render Mdl 
-        model.mdl 
-        [ Layout.fixedHeader
-        , Layout.selectedTab 0
-        ]
-        { header = [ Layout.row [] 
-                      [ Layout.title [] [ text "Mixer" ]] ]
-        , drawer = []
-        , tabs = tabs
-        , main = [ viewBody model ]
-        }
+view model = 
+  Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
+    Layout.render Mdl 
+      model.mdl 
+      [ Layout.fixedHeader
+      , Layout.selectedTab model.selectedTab
+      , Layout.onSelectTab Msgs.SelectTab
+      ]
+      { header = [ Layout.row [] 
+                    [ Layout.title 
+                      [ Options.onClick (Router.gotoMixes)] 
+                      [ text "Mixer" ]] ]
+      , drawer = []
+      , tabs = ( [ text "Control", text "Manage" ]
+               , [ Color.background (Color.color Color.Teal Color.S400) ] 
+               )
+      , main = [ viewBody model ]
+      }
 
 
 viewBody : Model -> Html Msg 
-viewBody model =
-  case model.route of
-    Models.MixesRoute ->
+viewBody ({ route, selectedTab } as model) =
+  case ( route, selectedTab ) of
+    ( _, 1 ) ->
+      ManChans.view model
+
+    ( Models.MixesRoute, 0 ) ->
       Mixes.view model 
 
-    Models.MixRoute id ->
+    ( Models.MixRoute id, 0 ) ->
       Channels.view model
-      --div [] [ text (toString id) ]
 
-    Models.NotFoundRoute ->
+    ( Models.NotFoundRoute, _ ) ->
       div [] [ text "not found" ]
+
+    ( _, _ ) ->
+      div [] [ text "not found combination" ]
 
 
 

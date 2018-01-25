@@ -2,7 +2,8 @@ module Router exposing (..)
 
 import Navigation exposing (Location)
 import Models exposing (MixId, Route(..))
-import UrlParser exposing (..)
+import UrlParser exposing (..) 
+import Msgs exposing (Msg)
 
 
 matchers : Parser (Route -> a) a
@@ -33,4 +34,13 @@ mixPath : MixId -> String
 mixPath id =
   mixesPath ++ "/" ++ (toString id)
 
+
+gotoMix : MixId -> Msg
+gotoMix id =
+  Msgs.NewUrl (mixPath id)
+
+
+gotoMixes : Msg
+gotoMixes =
+  Msgs.NewUrl mixesPath
 
