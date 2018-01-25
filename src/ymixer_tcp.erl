@@ -13,6 +13,6 @@ send(Host, Message) ->
 send(Host, PortNo, Message) ->
     {ok,Sock} = gen_tcp:connect(Host,PortNo,[binary, {packet, 0}, {active,false}]),
     gen_tcp:send(Sock,Message),
-    A = gen_tcp:recv(Sock,0),
+    A = gen_tcp:recv(Sock,0, 1000),
     gen_tcp:close(Sock),
     A.
