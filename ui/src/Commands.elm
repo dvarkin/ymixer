@@ -33,23 +33,24 @@ mixesDecoder =
   Decode.list Decode.int
 
 
---mixDecoder : Decode.Decoder Mix 
---mixDecoder =
---  decode Mix
---    |> required "id" Decode.int
---    |> required "name" Decode.string 
-
-
 fetchChannels : MixId -> Cmd Msg
 fetchChannels id =
-  Http.get (fetchChannelsUrl id) channelsDecoder
+  Http.request
+    { method = "GET"
+    , headers = [ Http.header "Content-type" "application/json" ]
+    , url = fetchChannelsUrl id
+    , body = Http.emptyBody
+    , expect = Http.expectJson channelsDecoder
+    , timeout = Nothing
+    , withCredentials = False
+    }
     |> RemoteData.sendRequest
     |> Cmd.map OnFetchChannels
 
 
 fetchChannelsUrl : MixId -> String 
 fetchChannelsUrl id =
-  "/api/mixes/" ++ (toString id)
+  "/api/mix/" ++ (toString id)
 
 
 channelsDecoder : Decode.Decoder (List Channel)
