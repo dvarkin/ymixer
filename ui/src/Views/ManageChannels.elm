@@ -1,6 +1,6 @@
 module Views.ManageChannels exposing (..)
 
-import Html exposing (Html, div, text, ul, li)
+import Html exposing (Html, div, text, ul, li, p)
 import Models exposing (Model, Mdl, Channel, ChannelId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
@@ -18,7 +18,11 @@ view model =
     , Grid.size Grid.Tablet 8
     , Grid.size Grid.Phone 4 
     ]
-    [ maybeDashboard model ]
+    [ Options.styled p
+      [ Typography.subhead ]
+      [ text "Hint: you can always use +/- keys to change button size" ]
+    , maybeDashboard model 
+    ]
   ]
 
 
