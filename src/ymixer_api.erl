@@ -10,6 +10,8 @@
 
 -export([mixes/0, mix_channels_state/3, mix_turn_off/3]).
 
+-export([channel_switch_on/3, channel_switch_off/3]).
+
 mixes() ->
     application:get_env(ymixer, mixes).
 
@@ -31,6 +33,16 @@ channel_mix_turn_off(Ip, MixID, Channel) ->
     OnCmd = ymixer_scp_protocol:set_channel_mix_state(Channel, MixID, 1),
     VolCmd = ymixer_scp_protocol:set_channel_mix_level_off(Channel, MixID),
     ymixer_tcp:send(Ip, OnCmd),
+    ymixer_tcp:send(Ip, VolCmd).
+
+
+channel_switch_on(Ip, MixID, Channel) ->
+    VolCmd = ymixer_scp_protocol:set_channel_mix_level_on(Channel, MixID),
+    ymixer_tcp:send(Ip, VolCmd).
+    
+
+channel_switch_off(Ip, MixID, Channel) ->
+    VolCmd = ymixer_scp_protocol:set_channel_mix_level_off(Channel, MixID),
     ymixer_tcp:send(Ip, VolCmd).
     
 

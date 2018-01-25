@@ -40,22 +40,24 @@ resource_exists(Req, State) ->
 
 mix_channels(Req, State) ->
     Method = cowboy_req:method(Req),
-    Result = mix_handler(Method, State),
-    {Result, Req, State}.
+    mix_handler(Method, Req, State).
 
-mix_handler(<<"GET">>, #{mix_id := MixID, mixer_ip := Ip, channels := Channels }) ->
+
+mix_handler(<<"GET">>, Req,  #{mix_id := MixID, mixer_ip := Ip, channels := Channels } = State) ->
     MixChannels = ymixer_api:mix_channels_state(Ip, MixID, Channels),
     Result = [#{<<"id">> => Channel, 
        <<"on">> => true_false(Off), 
        <<"image">> => <<"https://api.adorable.io/avatars/285/channel-1.png">>}  
               || #{<<"channel">> := Channel, <<"volume">> := Off} <- MixChannels],
-    jiffy:encode(Result);
+    {jiffy:encode(Result), Req, State};
 
 
-mix_handler(<<"POST">>, #{mix_id := MixID, mixer_ip := Ip, channels := Channels} ) ->
+mix_handler(<<"POST">>, Req, #{mix_id := MixID, mixer_ip := Ip, channels := Channels} = State) ->
     ymixer_api:mix_turn_off(Ip, MixID, Channels),
-    {true, jiffy:encode(#{<<"response">> => <<"ok">>})};
-mix_handler(_, _State) ->
+    Body = cowboy_req:set_resp_body(<<"ok">>, Req),
+    {true, Body, State};
+
+mix_handler(_, _Req,  _State) ->
     false.
 
 
