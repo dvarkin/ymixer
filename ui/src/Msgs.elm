@@ -10,6 +10,7 @@ type Msg
   = OnFetchMixes (WebData (List MixId))
   | OnFetchChannels (WebData (List Channel))
   | OnLocationChange Location
+  | TurnMixOff MixId
   | Mdl (Material.Msg Msg)
   | NewUrl String
   | SetChannel ( ChannelId, Bool )

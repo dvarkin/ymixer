@@ -23,6 +23,13 @@ update msg model =
     NewUrl newUrl ->
       model ! [ Navigation.newUrl newUrl ]
 
+    TurnMixOff id ->
+      let
+      -- must send command
+        _ = Debug.log "turn off mix" id 
+      in
+        model ! []
+
     OnFetchMixes response ->
       let
         mixes =
@@ -78,11 +85,23 @@ update msg model =
 
             _ ->
               Nothing
+
+        newChannels =
+          case newRoute of 
+            MixesRoute ->
+              RemoteData.NotAsked
+
+            MixRoute _ ->
+              RemoteData.Loading
+
+            _ ->
+              model.channels
       in
         { model 
           | route = newRoute
           , mix = newMix
           , selectedTab = 0 
+          , channels = newChannels
         } ! cmds
 
 
