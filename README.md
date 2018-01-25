@@ -39,3 +39,29 @@ Midi driver for Yamaha C5 series
 
 `sudo systemctl restart nginx`
 
+
+### API 
+
+## Mixes list
+
+`curl -i -H "Content-type: application/json" -X GET  localhost:8080/api/mixes`
+
+response 
+
+`[0,1,2,3,4,5]`
+
+## Set all channels in mix to OFF
+
+`curl -i -H "Content-type: application/json" -X POST  localhost:8080/api/mix/$MIXID$`
+
+## Get info about mix
+
+`curl -i -H "Content-type: application/json" -X GET  localhost:8080/api/mix/$MIXID$`
+
+Response JSON: 
+
+`[{"on":false,"image":"https://api.adorable.io/avatars/285/channel-1.png","id":0},
+  {"on":false,"image":"https://api.adorable.io/avatars/285/channel-1.png","id":1},
+  {"on":false,"image":"https://api.adorable.io/avatars/285/channel-1.png","id":2}]`
+
+
