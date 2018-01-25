@@ -17,8 +17,8 @@ update msg model =
     Mdl msg_ ->
       Material.update Mdl msg_ model
 
-    SelectTab tab ->
-      { model | selectedTab = tab } ! []
+    EditPhotos ->
+      { model | editPhotos = not model.editPhotos } ! []
 
     NewUrl newUrl ->
       model ! [ Navigation.newUrl newUrl ]
@@ -100,7 +100,6 @@ update msg model =
         { model 
           | route = newRoute
           , mix = newMix
-          , selectedTab = 0 
           , channels = newChannels
         } ! cmds
 
