@@ -65,12 +65,7 @@ type alias MixId =
   Int 
 
 
-type alias MixName =
-  String 
-
-
 type alias Mix =
   { id : MixId 
-  , name : String
   }
 

@@ -1,6 +1,6 @@
 module Update exposing (..)
 
-import Models exposing (Model, Route(..), Mdl, ChannelId, Channel)
+import Models exposing (Model, Mix, Route(..), Mdl, ChannelId, Channel)
 import Msgs exposing (Msg(..))
 import Router exposing (parseLocation)
 import Commands exposing (fetchChannels)
@@ -24,7 +24,11 @@ update msg model =
       model ! [ Navigation.newUrl newUrl ]
 
     OnFetchMixes response ->
-      { model | mixes = response } ! []
+      let
+        mixes =
+          RemoteData.map (\ids -> List.map (\id -> Mix id) ids) response
+      in
+        { model | mixes = mixes } ! []
 
     OnFetchChannels response ->
       { model | channels = response } ! []

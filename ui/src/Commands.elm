@@ -10,7 +10,15 @@ import Msgs exposing (..)
 
 fetchMixes : Cmd Msg 
 fetchMixes =
-  Http.get fetchMixesUrl mixesDecoder
+  Http.request
+    { method = "GET"
+    , headers = [ Http.header "Content-type" "application/json" ]
+    , url = fetchMixesUrl
+    , body = Http.emptyBody
+    , expect = Http.expectJson mixesDecoder
+    , timeout = Nothing
+    , withCredentials = False
+    }
     |> RemoteData.sendRequest
     |> Cmd.map OnFetchMixes
 
@@ -20,16 +28,16 @@ fetchMixesUrl =
   "/api/mixes"
 
 
-mixesDecoder : Decode.Decoder (List Mix)
+mixesDecoder : Decode.Decoder (List MixId)
 mixesDecoder =
-  Decode.list mixDecoder 
+  Decode.list Decode.int
 
 
-mixDecoder : Decode.Decoder Mix 
-mixDecoder =
-  decode Mix
-    |> required "id" Decode.int
-    |> required "name" Decode.string 
+--mixDecoder : Decode.Decoder Mix 
+--mixDecoder =
+--  decode Mix
+--    |> required "id" Decode.int
+--    |> required "name" Decode.string 
 
 
 fetchChannels : MixId -> Cmd Msg
