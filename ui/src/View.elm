@@ -14,23 +14,32 @@ import Router
 
 view : Model -> Html Msg 
 view model = 
-  Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
-    Layout.render Mdl 
-      model.mdl 
-      [ Layout.fixedHeader
-      , Layout.selectedTab model.selectedTab
-      , Layout.onSelectTab Msgs.SelectTab
-      ]
-      { header = [ Layout.row [] 
-                    [ Layout.title 
-                      [ Options.onClick (Router.gotoMixes)] 
-                      [ text "Mixer" ]] ]
-      , drawer = []
-      , tabs = ( [ text "Control", text "Manage" ]
-               , [ Color.background (Color.color Color.Teal Color.S400) ] 
-               )
-      , main = [ viewBody model ]
-      }
+  let
+    title =
+      case model.mix of
+        Just id ->
+          "Mix " ++ toString id
+
+        Nothing ->
+          "Mixer"
+  in   
+    Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
+      Layout.render Mdl 
+        model.mdl 
+        [ Layout.fixedHeader
+        , Layout.selectedTab model.selectedTab
+        , Layout.onSelectTab Msgs.SelectTab
+        ]
+        { header = [ Layout.row [] 
+                      [ Layout.title 
+                        [ Options.onClick (Router.gotoMixes)] 
+                        [ text title ]] ]
+        , drawer = []
+        , tabs = ( [ text "Control", text "Manage" ]
+                 , [ Color.background (Color.color Color.Teal Color.S400) ] 
+                 )
+        , main = [ viewBody model ]
+        }
 
 
 viewBody : Model -> Html Msg 
