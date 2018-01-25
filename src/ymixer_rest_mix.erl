@@ -54,7 +54,7 @@ mix_handler(<<"GET">>, #{mix_id := MixID, mixer_ip := Ip, channels := Channels }
 
 mix_handler(<<"POST">>, #{mix_id := MixID, mixer_ip := Ip, channels := Channels} ) ->
     ymixer_api:mix_turn_off(Ip, MixID, Channels),
-    {true, jiffy:encode(#{<<"response">> => <<"ok">>})};
+    {true, <<"ok">>};
 mix_handler(_, _State) ->
     false.
 
