@@ -8,15 +8,15 @@ import Keyboard
 import Http
 
 type Msg 
-  = OnFetchMixes (WebData (List MixId))
-  | OnFetchChannels (WebData (List Channel))
-  | OnLocationChange Location
-  | TurnMixOff MixId
-  | Mdl (Material.Msg Msg)
-  | NewUrl String
+  = Mdl (Material.Msg Msg)
   | KeyMsg Keyboard.KeyCode
+  | NavigateToUrl String
   | EditPhotos
-  | OnMixTurnOff (Result Http.Error String)
+  | OnLocationChange Location
+  | OnFetchChannels (WebData (List Channel))
+  | OnFetchMixes (WebData (List MixId))
+  | MuteMix MixId
+  | OnMuteMix (Result Http.Error ())
   | SetChannel ( MixId, ChannelId, Bool )
   | OnSetChannel (Result Http.Error (MixId, ChannelId, Bool))
 

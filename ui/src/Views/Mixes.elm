@@ -84,7 +84,7 @@ mixCard {mdl, cardSize} {id} =
               [ Button.colored
               , Button.raised
               , Color.background (Color.color Color.Teal Color.S400)
-              , Options.onClick (Msgs.TurnMixOff id)
+              , Options.onClick (Msgs.MuteMix id)
               ]
               [ text "Mute all"]
           ]

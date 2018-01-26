@@ -46,11 +46,11 @@ turnMixOff id =
     , headers = [ Http.header "Content-type" "application/json" ]
     , url = fetchChannelsUrl id
     , body = Http.emptyBody
-    , expect = Http.expectStringResponse (\_ -> Ok ("ok"))
+    , expect = Http.expectStringResponse (\_ -> Ok ())
     , timeout = Nothing
     , withCredentials = False
     } 
-    |> Http.send OnMixTurnOff
+    |> Http.send OnMuteMix
       
 
 fetchMixes : Cmd Msg 
@@ -109,8 +109,5 @@ channelDecoder =
     |> required "id" Decode.int
     |> required "on" Decode.bool
     |> required "image" Decode.string
-
-
-
 
 

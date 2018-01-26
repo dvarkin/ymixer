@@ -37,10 +37,10 @@ mixPath id =
 
 gotoMix : MixId -> Msg
 gotoMix id =
-  Msgs.NewUrl (mixPath id)
+  Msgs.NavigateToUrl (mixPath id)
 
 
 gotoMixes : Msg
 gotoMixes =
-  Msgs.NewUrl mixesPath
+  Msgs.NavigateToUrl mixesPath
 

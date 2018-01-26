@@ -5,11 +5,10 @@ import Msgs exposing (Msg(..))
 import Router exposing (parseLocation)
 import Commands exposing (fetchChannels, turnMixOff, setChannel)
 import Material 
-import Navigation
+import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 import List.Extra 
 import Debug
-import Http
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -21,59 +20,88 @@ update msg model =
     EditPhotos ->
       { model | editPhotos = not model.editPhotos } ! []
 
-    NewUrl newUrl ->
+    NavigateToUrl newUrl ->
       model ! [ Navigation.newUrl newUrl ]
 
-    OnMixTurnOff _ ->
+    OnMuteMix _ ->
       model ! []
 
-    TurnMixOff id ->
+    MuteMix id ->
       model ! [ turnMixOff id ] 
 
     SetChannel ( mix, ch, on ) ->
       model ! [ setChannel mix ch on ]
 
     OnSetChannel (Ok (mix, chan, on)) ->
-      let
-        newChans = 
-          tryUpdateChannel mix chan on model
-      in          
-        { model | channels = newChans } ! []       
-
+      tryUpdateChannel mix chan on model
+      
     OnSetChannel (Err _) ->
-      let
-        _ = 
-          Debug.log "failed to set channel"
-      in          
-        model ! []
+      Debug.log "failed to set channel" model ! []
 
     OnFetchMixes response ->
-      let
-        mixes =
-          RemoteData.map (\ids -> List.map (\id -> Mix id) ids) response
-      in
-        { model | mixes = mixes } ! []
+        { model
+          | mixes
+              = RemoteData.map (\ids -> List.map (\id -> Mix id) ids) response
+        } ! []
 
     OnFetchChannels response ->
       { model | channels = response } ! []
 
     KeyMsg code ->
-      case code of 
-        187 -> -- '=' inc
-          { model | cardSize = model.cardSize + 5 } ! []
-
-        189 -> -- '-' dec
-          { model | cardSize = model.cardSize - 5 } ! []
-
-        _ ->
-          model ! []
+      updateCardSize code model
           
     OnLocationChange location ->
-      let 
+      handleLocationChange location model
+
+
+tryUpdateChannel : MixId -> ChannelId -> Bool -> Model -> ( Model, Cmd Msg )
+tryUpdateChannel mix chan on model =
+  let
+    newChans =
+      case model.mix of
+        Just mixId ->
+          if mixId == mix then
+            RemoteData.map (updateChannel chan on) model.channels
+          else
+            model.channels
+        Nothing ->
+          model.channels
+  in
+    { model | channels = newChans } ! []
+
+
+updateChannel : ChannelId -> Bool -> List Channel -> List Channel
+updateChannel id on chans =
+  let 
+    replaceChan chans chan =
+      List.Extra.replaceIf (\ch -> ch.id == id) chan chans
+  in
+    chans
+      |> List.Extra.find (\ch -> ch.id == id)
+      |> Maybe.map (\ch -> { ch | on = on })
+      |> Maybe.map (replaceChan chans)
+      |> Maybe.withDefault chans
+
+
+updateCardSize : Int -> Model -> ( Model, Cmd Msg )
+updateCardSize code model =
+  let
+    howMuch =
+      case code of
+        187 -> -5 -- dec (-)
+        189 ->  5 -- inc (=)
+        _   ->  0 -- ignore
+  in
+    { model | cardSize = model.cardSize - howMuch } ! []
+
+
+handleLocationChange : Location -> Model -> ( Model, Cmd Msg )
+handleLocationChange location model =
+      let
         newRoute =
           parseLocation location
 
-        cmds = 
+        cmds =
           case newRoute of
             Models.MixRoute id ->
               [ fetchChannels id]
@@ -90,7 +118,7 @@ update msg model =
               Nothing
 
         newChannels =
-          case newRoute of 
+          case newRoute of
             MixesRoute ->
               RemoteData.NotAsked
 
@@ -100,34 +128,8 @@ update msg model =
             _ ->
               model.channels
       in
-        { model 
+        { model
           | route = newRoute
           , mix = newMix
           , channels = newChannels
         } ! cmds
-
-
-tryUpdateChannel : MixId -> ChannelId -> Bool -> Model -> WebData (List Channel)
-tryUpdateChannel mix chan on model =
-  case model.mix of
-    Just mixId ->
-      if mixId == mix then
-        RemoteData.map (updateChannel chan on) model.channels
-      else
-        model.channels
-    Nothing ->
-      model.channels
-
-
-updateChannel : ChannelId -> Bool -> List Channel -> List Channel
-updateChannel id on chans =
-  let 
-    replaceChan chans chan =
-      List.Extra.replaceIf (\ch -> ch.id == id) chan chans
-  in
-    chans
-      |> List.Extra.find (\ch -> ch.id == id)
-      |> Maybe.map (\ch -> { ch | on = on })
-      |> Maybe.map (replaceChan chans)
-      |> Maybe.withDefault chans
-
