@@ -70,4 +70,6 @@ Response JSON:
 
 ## Upload file
 
-`curl -i  -F 'file=@erlang.mk' localhost:8080/api/channel/upload/1`
+*Content Type must be "image/jpeg"*
+
+`curl -i  -F 'file=@erlang.jpg' localhost:8080/api/channel/upload/1`
