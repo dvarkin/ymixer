@@ -7,7 +7,7 @@ init(Req, #{image_dir := Dir} = Opts) ->
     ChannelId = binary_to_list(cowboy_req:binding(channel_id, Req)),
     {ok, Headers, Req2} = cowboy_req:read_part(Req),
     {ok, Data, Req3} = cowboy_req:read_part_body(Req2),
-    {file, _FileField, Filename, ContentType}
+    {file, _FileField, _Filename, ContentType}
         = cow_multipart:form_data(Headers),
     Req4 = case upload_handler(ContentType, Dir, ChannelId, Data) of
                ok -> cowboy_req:reply(200, #{
