@@ -10,3 +10,10 @@ Cargo.lock
 **/*.rs.bk
 *~
 *.beam
+.erlang.mk/
+.idea/
+_rel/
+deps/
+ebin/
+ymixer.d
+*.iml
