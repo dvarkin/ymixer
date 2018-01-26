@@ -67,3 +67,9 @@ Response JSON:
 ## Switch channel Of/Off
 
 `curl -i -H "Content-type: application/json" -X POST  localhost:8080/api/channel/switch/0/3/on`
+
+## Upload file
+
+*Content Type must be "image/jpeg"*
+
+`curl -i  -F 'file=@erlang.jpg' localhost:8080/api/channel/upload/1`
