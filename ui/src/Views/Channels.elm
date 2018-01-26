@@ -1,7 +1,7 @@
 module Views.Channels exposing (..)
 
 import Html exposing (Html, div, text, ul, li)
-import Models exposing (Model, Mdl, Channel, ChannelId)
+import Models exposing (Model, Mdl, Channel, ChannelId, MixId)
 import Msgs exposing (Msg)
 import RemoteData exposing (WebData)
 import Material.Options as Options exposing (css)
@@ -9,7 +9,7 @@ import Material.Color as Color
 import Material.Typography as Typography
 import Material.Grid as Grid
 import Material.Card as Card 
-import Material.Progress as Loading
+
 
 view : Model -> Html Msg
 view model =
@@ -24,24 +24,27 @@ view model =
 
 
 maybeDashboard : Model -> Html Msg
-maybeDashboard model =
-  case model.channels of
-    RemoteData.NotAsked ->
+maybeDashboard ({channels, mix} as model) =
+  case (channels, mix) of
+    ( RemoteData.NotAsked, _ ) ->
       div [] [ text "Not asked for channels" ]
 
-    RemoteData.Loading ->
+    ( RemoteData.Loading, _ ) ->
       div [] []
       --Loading.indeterminate
 
-    RemoteData.Failure error ->
+    ( RemoteData.Failure error, _ ) ->
       div [] [ text (toString error) ]
 
-    RemoteData.Success channels ->
-      dashboard model channels
+    ( RemoteData.Success channels, Nothing ) ->
+      div [] []
+
+    ( RemoteData.Success channels, Just mixId ) ->
+      dashboard model channels mixId
 
 
-dashboard : Model -> (List Channel) -> Html Msg 
-dashboard model chans =
+dashboard : Model -> (List Channel) -> MixId-> Html Msg 
+dashboard model chans mix =
   Options.div
     [ Options.center
     , css "width" "100%"
@@ -54,13 +57,13 @@ dashboard model chans =
         , css "align-items" "flex-start"
         , css "width" "100%"
         ]
-        (List.map (chanCard model) chans)
+        (List.map (chanCard model mix) chans)
     ]
 
 
 
-chanCard : Model -> Channel -> Html Msg 
-chanCard {mdl, cardSize} {id, image, on} = 
+chanCard : Model -> MixId-> Channel -> Html Msg 
+chanCard {mdl, cardSize} mix {id, image, on} = 
   let
     (title, color) =
       case on of
@@ -74,7 +77,7 @@ chanCard {mdl, cardSize} {id, image, on} =
       , css "height" ((toString cardSize) ++ "px")
       , css "margin" "5px"
       , css "background" ("url('" ++ image ++ "') center / cover")
-      , Options.onClick (Msgs.SetChannel (id, not on))
+      , Options.onClick (Msgs.SetChannel (mix, id, not on))
       ]
       [ Card.text [ Card.expand ] [] -- Filler
       , Card.text

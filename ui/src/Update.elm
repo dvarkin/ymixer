@@ -1,14 +1,15 @@
 module Update exposing (..)
 
-import Models exposing (Model, Mix, Route(..), Mdl, ChannelId, Channel)
+import Models exposing (Model, Mix, MixId, Route(..), Mdl, ChannelId, Channel)
 import Msgs exposing (Msg(..))
 import Router exposing (parseLocation)
-import Commands exposing (fetchChannels)
+import Commands exposing (fetchChannels, turnMixOff, setChannel)
 import Material 
 import Navigation
-import RemoteData
+import RemoteData exposing (WebData)
 import List.Extra 
 import Debug
+import Http
 
 
 update : Msg -> Model -> ( Model, Cmd Msg )
@@ -23,11 +24,27 @@ update msg model =
     NewUrl newUrl ->
       model ! [ Navigation.newUrl newUrl ]
 
+    OnMixTurnOff _ ->
+      model ! []
+
     TurnMixOff id ->
+      model ! [ turnMixOff id ] 
+
+    SetChannel ( mix, ch, on ) ->
+      model ! [ setChannel mix ch on ]
+
+    OnSetChannel (Ok (mix, chan, on)) ->
       let
-      -- must send command
-        _ = Debug.log "turn off mix" id 
-      in
+        newChans = 
+          tryUpdateChannel mix chan on model
+      in          
+        { model | channels = newChans } ! []       
+
+    OnSetChannel (Err _) ->
+      let
+        _ = 
+          Debug.log "failed to set channel"
+      in          
         model ! []
 
     OnFetchMixes response ->
@@ -40,19 +57,6 @@ update msg model =
     OnFetchChannels response ->
       { model | channels = response } ! []
 
-    SetChannel ( ch, on ) ->
-      let 
-        newChannes = RemoteData.map (updateChannel ch on) model.channels
-      in 
-        { model | channels = newChannes } ! []
-
-    ChangeCardSize howMuch ->
-      let
-        _ = Debug.log "howMuch" howMuch
-        _ = Debug.log "newSize" model.cardSize + howMuch
-      in
-        model ! [ Cmd.none ]
-
     KeyMsg code ->
       case code of 
         187 -> -- '=' inc
@@ -64,7 +68,6 @@ update msg model =
         _ ->
           model ! []
           
-
     OnLocationChange location ->
       let 
         newRoute =
@@ -102,6 +105,18 @@ update msg model =
           , mix = newMix
           , channels = newChannels
         } ! cmds
+
+
+tryUpdateChannel : MixId -> ChannelId -> Bool -> Model -> WebData (List Channel)
+tryUpdateChannel mix chan on model =
+  case model.mix of
+    Just mixId ->
+      if mixId == mix then
+        RemoteData.map (updateChannel chan on) model.channels
+      else
+        model.channels
+    Nothing ->
+      model.channels
 
 
 updateChannel : ChannelId -> Bool -> List Channel -> List Channel

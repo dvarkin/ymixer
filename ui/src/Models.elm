@@ -45,11 +45,6 @@ type alias ChannelId =
   Int
 
 
---type ChannelStatus 
---  = On 
---  | Off
-
-
 type alias ChannelName =
   String 
 

@@ -4,9 +4,54 @@ import Http
 import Json.Decode as Decode 
 import Json.Decode.Pipeline exposing (decode, required)
 import RemoteData
-import Models exposing (Mix, MixId, Channel)
+import Models exposing (Mix, MixId, Channel, ChannelId)
 import Msgs exposing (..)
 
+
+setChannel : MixId -> ChannelId -> Bool -> Cmd Msg 
+setChannel mix chan on =
+  let
+    urlFn =
+      if on then
+        turnOnChanUrl
+      else
+        turnOffChanUrl
+  in
+    Http.request
+      { method = "POST"
+      , headers = [ Http.header "Content-type" "application/json" ]
+      , url = urlFn mix chan
+      , body = Http.emptyBody
+      , expect = Http.expectStringResponse (\_ -> Ok ( mix, chan, on ))
+      , timeout = Nothing
+      , withCredentials = False
+      } 
+      |> Http.send OnSetChannel
+
+
+turnOnChanUrl : MixId -> ChannelId -> String
+turnOnChanUrl mix chan =
+  "/api/channel/switch/" ++ toString mix ++ "/" ++ toString chan ++ "/on"
+
+
+turnOffChanUrl : MixId -> ChannelId -> String
+turnOffChanUrl mix chan =
+  "/api/channel/switch/" ++ toString mix ++ "/" ++ toString chan ++ "/off"
+
+
+turnMixOff : MixId -> Cmd Msg 
+turnMixOff id =
+  Http.request
+    { method = "POST"
+    , headers = [ Http.header "Content-type" "application/json" ]
+    , url = fetchChannelsUrl id
+    , body = Http.emptyBody
+    , expect = Http.expectStringResponse (\_ -> Ok ("ok"))
+    , timeout = Nothing
+    , withCredentials = False
+    } 
+    |> Http.send OnMixTurnOff
+      
 
 fetchMixes : Cmd Msg 
 fetchMixes =

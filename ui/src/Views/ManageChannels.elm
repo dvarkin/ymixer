@@ -65,7 +65,7 @@ chanCard : Model -> Channel -> Html Msg
 chanCard {mdl, cardSize} {id, image, on} = 
   let
     title =
-      "Upload"
+      "Ch " ++ toString (id + 1)
   in    
     Card.view
       [ css "width" ((toString cardSize) ++ "px")
@@ -81,7 +81,7 @@ chanCard {mdl, cardSize} {id, image, on} =
               [ Color.text Color.white
               --, Typography.left
               , Typography.contrast 1.0 ]
-              [ text "Upload" ]
+              [ text title ]
           ]
       ]
 

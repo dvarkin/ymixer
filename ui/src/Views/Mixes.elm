@@ -9,7 +9,6 @@ import Material.Color as Color
 import Material.Grid as Grid
 import Material.Card as Card 
 import Material.Button as Button
-import Material.Menu as Menu
 import Router
 
 view : Model -> Html Msg
@@ -61,7 +60,7 @@ mixCard : Model -> Mix -> Html Msg
 mixCard {mdl, cardSize} {id} = 
   let
     title = 
-      "Mix " ++ toString id
+      "Mix " ++ toString (id + 1)
   in    
     Card.view
       [ css "width" ((toString cardSize) ++ "px")
@@ -87,6 +86,6 @@ mixCard {mdl, cardSize} {id} =
               , Color.background (Color.color Color.Teal Color.S400)
               , Options.onClick (Msgs.TurnMixOff id)
               ]
-              [ text "Off all"]
+              [ text "Mute all"]
           ]
       ]

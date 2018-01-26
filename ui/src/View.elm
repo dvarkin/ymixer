@@ -18,7 +18,7 @@ view model =
     (title, navigation) =
       case model.mix of
         Just id ->
-          ( "Mix " ++ toString id, [ editPhotosNavidation ] )
+          ( "Mix " ++ toString (id + 1), [ editPhotosNavidation ] )
 
         Nothing ->
           ( "Mixer", [] )
