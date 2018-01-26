@@ -67,3 +67,7 @@ Response JSON:
 ## Switch channel Of/Off
 
 `curl -i -H "Content-type: application/json" -X POST  localhost:8080/api/channel/switch/0/3/on`
+
+## Upload file
+
+`curl -i  -F 'file=@erlang.mk' localhost:8080/api/channel/upload/1`
