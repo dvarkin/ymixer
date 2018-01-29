@@ -59,59 +59,19 @@ handle_call(_Request, _From, State) ->
     Reply = ok,
     {reply, Reply, State}.
 
-%%--------------------------------------------------------------------
-%% @private
-%% @doc
-%% Handling cast messages
-%%
-%% @spec handle_cast(Msg, State) -> {noreply, State} |
-%%                                  {noreply, State, Timeout} |
-%%                                  {stop, Reason, State}
-%% @end
-%%--------------------------------------------------------------------
 handle_cast(_Msg, State) ->
     {noreply, State}.
 
-%%--------------------------------------------------------------------
-%% @private
-%% @doc
-%% Handling all non call/cast messages
-%%
-%% @spec handle_info(Info, State) -> {noreply, State} |
-%%                                   {noreply, State, Timeout} |
-%%                                   {stop, Reason, State}
-%% @end
-%%--------------------------------------------------------------------
 handle_info(run, #state{mixer_ip = MixerIP, commands = Commands, timeout = Timeout} = State) ->
-    error_logger:info_msg("run commands ~p with timeout: ~p", [Commands, Timeout]),
     Commands1 =run_commands(MixerIP, Timeout, Commands),
     {noreply, State#state{commands = Commands1}};
 
 handle_info(_Info, State) ->
     {noreply, State}.
 
-%%--------------------------------------------------------------------
-%% @private
-%% @doc
-%% This function is called by a gen_server when it is about to
-%% terminate. It should be the opposite of Module:init/1 and do any
-%% necessary cleaning up. When it returns, the gen_server terminates
-%% with Reason. The return value is ignored.
-%%
-%% @spec terminate(Reason, State) -> void()
-%% @end
-%%--------------------------------------------------------------------
 terminate(_Reason, _State) ->
     ok.
 
-%%--------------------------------------------------------------------
-%% @private
-%% @doc
-%% Convert process state when code is changed
-%%
-%% @spec code_change(OldVsn, State, Extra) -> {ok, NewState}
-%% @end
-%%--------------------------------------------------------------------
 code_change(_OldVsn, State, _Extra) ->
     {ok, State}.
 
@@ -123,6 +83,7 @@ code_change(_OldVsn, State, _Extra) ->
 run_commands(_MixerIP, _Timeout, []) ->
     [];
 run_commands(MixerIP, Timeout, [Command |  Tail]) ->
+    error_logger:info_msg("run command ~p with timeout: ~p", [Command, Timeout]),
     ymixer_tcp:send(MixerIP, Command),
     timer:sleep(Timeout),
     run_commands(MixerIP, Timeout, Tail).
