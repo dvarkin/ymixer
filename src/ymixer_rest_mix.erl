@@ -47,7 +47,7 @@ mix_handler(<<"GET">>, Req,  #{mix_id := MixID, mixer_ip := Ip, channels := Chan
     MixChannels = ymixer_api:mix_channels_state(Ip, MixID, Channels),
     Result = [#{<<"id">> => Channel, 
        <<"on">> => true_false(Off), 
-       <<"image">> => <<"https://api.adorable.io/avatars/285/channel-1.png">>}  
+       <<"image">> => list_to_binary("/images/channel-" ++ integer_to_list(Channel) ++ ".jpg")}  
               || #{<<"channel">> := Channel, <<"volume">> := Off} <- MixChannels],
     {jiffy:encode(Result), Req, State};
 
