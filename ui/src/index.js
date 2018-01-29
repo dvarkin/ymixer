@@ -1,7 +1,7 @@
 'use strict';
 
-// Require index.html so it gets copied to dist
-require('./index.html');
+import './index.html'
+import {uploadImage} from './uploader'
 
 var Elm = require('./Main.elm');
 var mountNode = document.getElementById('root');
@@ -10,3 +10,9 @@ var mountNode = document.getElementById('root');
 var app = Elm.Main.embed(mountNode);
 // var app = Elm.Main.fullscreen();
 // var app = Elm.Main.worker();
+
+app.ports.uploadImage.subscribe(
+	function(channelId) {
+		uploadImage(channelId);
+	}
+);

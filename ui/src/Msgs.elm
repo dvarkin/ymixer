@@ -19,4 +19,5 @@ type Msg
   | OnMuteMix (Result Http.Error ())
   | SetChannel ( MixId, ChannelId, Bool )
   | OnSetChannel (Result Http.Error (MixId, ChannelId, Bool))
+  | UploadImage Int
 

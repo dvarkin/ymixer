@@ -72,7 +72,7 @@ chanCard {mdl, cardSize} {id, image, on} =
       , css "height" ((toString cardSize) ++ "px")
       , css "margin" "5px"
       , css "background" ("url('" ++ image ++ "') center / cover")
-      --, Options.onClick (Msgs.SetChannel (id, not on))
+      , Options.onClick (Msgs.UploadImage id)
       ]
       [ Card.text [ Card.expand ] [] -- Filler
       , Card.text

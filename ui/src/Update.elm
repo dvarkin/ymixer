@@ -8,6 +8,7 @@ import Material
 import Navigation exposing (Location)
 import RemoteData exposing (WebData)
 import List.Extra 
+import Ports exposing (uploadImage)
 import Debug
 
 
@@ -34,14 +35,16 @@ update msg model =
 
     OnSetChannel (Ok (mix, chan, on)) ->
       tryUpdateChannel mix chan on model
-      
+
     OnSetChannel (Err _) ->
       Debug.log "failed to set channel" model ! []
 
     OnFetchMixes response ->
         { model
           | mixes
-              = RemoteData.map (\ids -> List.map (\id -> Mix id) ids) response
+              = RemoteData.map (\ids ->
+                  List.map (\id -> Mix id) ids)
+                  response
         } ! []
 
     OnFetchChannels response ->
@@ -52,6 +55,9 @@ update msg model =
           
     OnLocationChange location ->
       handleLocationChange location model
+
+    UploadImage ch ->
+      model ! [ uploadImage ch ]
 
 
 tryUpdateChannel : MixId -> ChannelId -> Bool -> Model -> ( Model, Cmd Msg )
