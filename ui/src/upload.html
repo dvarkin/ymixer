@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>YMixer</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <form id="file-form" action="handler.php" method="POST">
+      <input type="file" id="file-select" name="file"/>
+      <button type="submit" id="upload-button">Upload</button>
+    </form>
+    <script src="app.js"></script>
+  </body>
+</html>
+
+<script>
+form.onsubmit = function(event) {
+  event.preventDefault();
+
+  // Update button text.
+  uploadButton.innerHTML = 'Uploading...';
+
+  var files = fileSelect.files;
+  var formData = new FormData();
+
+  for (var i = 0; i < files.length; i++) {
+    var file = files[i];
+
+    // Check the file type.
+    if (!file.type.match('image.*')) {
+      continue;
+    }
+
+    // Add the file to the request.
+    formData.append('file', file, file.name);
+  }
+
+  var xhr = new XMLHttpRequest();
+  xhr.open('POST', '/api/channel/upload/1', true);
+  xhr.onload = function () {
+    if (xhr.status === 200) {
+      // File(s) uploaded.
+      uploadButton.innerHTML = 'Upload';
+    } else {
+      alert('An error occurred!');
+    }
+  };
+
+  xhr.send(formData);
+}
+</script>
