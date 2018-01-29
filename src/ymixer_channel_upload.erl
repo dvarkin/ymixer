@@ -25,6 +25,9 @@ init(Req, #{image_dir := Dir} = Opts) ->
 upload_handler(<<"image/jpeg">>, Dir, ChannelId, Data) when is_binary(Data) ->
     FileName = Dir ++ "/channel-" ++ ChannelId ++ ".jpg",
     file:write_file(FileName, Data);
+upload_handler(<<"image/png">>, Dir, ChannelId, Data) when is_binary(Data) ->
+    FileName = Dir ++ "/channel-" ++ ChannelId ++ ".png",
+    file:write_file(FileName, Data);
 upload_handler(ContentType, _Dir,  _ChannelId, _Data) ->
     {error, ContentType}.
 
