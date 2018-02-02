@@ -15,13 +15,13 @@
 mixes() ->
     application:get_env(ymixer, mixes).
 
-mix_channels_state(MixerIP, Mix, Channels) ->
+mix_channels_state(_MixerIP, Mix, Channels) ->
     ChannelVolumeCommands = [Command || Command <- [ymixer_scp_protocol:get_channel_mix_level(Channel, Mix) || Channel <- Channels]],
-    RawResponseVolume = [R || {ok, R} <- [ymixer_tcp:send(MixerIP, Command) || Command <- ChannelVolumeCommands]],
+    RawResponseVolume = [R || {ok, R} <- [ymixer_command_queue:get(Command) || Command <- ChannelVolumeCommands]],
     Volumes = [ymixer_scp_protocol:response_channel_mix_level(R) || R <- RawResponseVolume],
     
     ChannelStateCommands = [Command || Command <- [ymixer_scp_protocol:get_channel_mix_state(Channel, Mix) || Channel <- Channels]],
-    RawResponseState = [R || {ok, R} <- [ymixer_tcp:send(MixerIP, Command) || Command <- ChannelStateCommands]],
+    RawResponseState = [R || {ok, R} <- [ymixer_command_queue:get(Command) || Command <- ChannelStateCommands]],
     States = [ymixer_scp_protocol:response_channel_mix_state(R) || R <- RawResponseState],
   
     lists:zipwith(fun maps:merge/2, Volumes, States).
@@ -29,23 +29,21 @@ mix_channels_state(MixerIP, Mix, Channels) ->
 mix_turn_off(Ip, MixID, Channels) ->
     [channel_mix_turn_off(Ip, MixID, Channel) || Channel <- Channels].
 
-channel_mix_turn_off(Ip, MixID, Channel) ->
+channel_mix_turn_off(_Ip, MixID, Channel) ->
     OnCmd = ymixer_scp_protocol:set_channel_mix_state(Channel, MixID, 1),
     VolCmd = ymixer_scp_protocol:set_channel_mix_level_off(Channel, MixID),
-    ymixer_tcp:send(Ip, OnCmd),
-    ymixer_tcp:send(Ip, VolCmd).
+    ymixer_command_queue:set(OnCmd),
+    ymixer_command_queue:set(VolCmd).
 
 
-channel_switch_on(Ip, MixID, Channel) ->
+channel_switch_on(_Ip, MixID, Channel) ->
     VolCmd = ymixer_scp_protocol:set_channel_mix_level_on(Channel, MixID),
-    ymixer_tcp:send(Ip, VolCmd).
+    ymixer_command_queue:set(VolCmd).
     
 
-channel_switch_off(Ip, MixID, Channel) ->
+channel_switch_off(_Ip, MixID, Channel) ->
     VolCmd = ymixer_scp_protocol:set_channel_mix_level_off(Channel, MixID),
-    ymixer_tcp:send(Ip, VolCmd).
-    
-
+    ymixer_command_queue:set(VolCmd).
     
     
 
