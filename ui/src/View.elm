@@ -33,6 +33,18 @@ view model =
                           [ Options.onClick (Router.gotoMixes)] 
                           [ text title ]
                       , Layout.spacer
+                      , Layout.title 
+                        [ Options.css "background" ("url('/assets/bbh.png') center / cover") 
+                        , Options.css "width" "48px"
+                        , Options.css "height" "48px"
+                        , Options.css "margin-left" "auto"
+                        , Options.css "margin-right" "auto"
+                        , Options.css "left" "0"
+                        , Options.css "right" "0"
+                        , Options.css "position" "absolute"
+                        ] 
+                        []
+                      , Layout.spacer
                       , Layout.navigation [] navigation
                       ]
                     ]

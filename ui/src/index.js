@@ -1,8 +1,10 @@
 'use strict';
 
 import './index.html'
-import './material.css'
+import './material.min.css'
+import './bbh.png'
 import {uploadImage} from './uploader'
+
 
 var Elm = require('./Main.elm');
 var mountNode = document.getElementById('root');
