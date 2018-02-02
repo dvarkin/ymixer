@@ -68,9 +68,11 @@ chanCard {mdl, cardSize} mix {id, image, on} =
     (title, color) =
       case on of
         True ->
-          ( "On", Color.color Color.Green Color.A400 )
+          ( "On", Color.color Color.Teal Color.A400 )
         False ->
           ( "Off", Color.color Color.Grey Color.S600 )
+    name =
+      "Ch " ++ toString (id + 1)
   in    
     Card.view
       [ css "width" ((toString cardSize) ++ "px")
@@ -79,7 +81,10 @@ chanCard {mdl, cardSize} mix {id, image, on} =
       , css "background" ("url('" ++ image ++ "') center / cover")
       , Options.onClick (Msgs.SetChannel (mix, id, not on))
       ]
-      [ Card.text [ Card.expand ] [] -- Filler
+      [  Card.text
+          [ Card.expand, Color.text (Color.color Color.Grey Color.S500) ] 
+          [ text name ] 
+          --Card.text [ Card.expand ] [] -- Filler
       , Card.text
           [ css "background" "rgba(0, 0, 0, 0.2)" ] -- Non-gradient scrim
           [ Options.span

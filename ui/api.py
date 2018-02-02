@@ -1,5 +1,5 @@
 import logging
-
+import random
 from flask import Flask, render_template, request
 from flask.json import jsonify
 
@@ -15,44 +15,19 @@ app = Flask(__name__,
 
 @app.route('/api/mixes')
 def mixes():
-    return jsonify([
-      {
-        "id":1,
-        "name": "first mix"
-      },
-      {
-        "id":2,
-        "name": "second mix"
-      },
-      {
-        "id":3,
-        "name": "third mix"
-      },
-      {
-        "id":4,
-        "name": "forth mix"
-      },
-      {
-        "id":5,
-        "name": "fifth mix"
-      },
-      {
-        "id":6,
-        "name": "sixth mix"
-      }
-    ])
+    return jsonify([1, 2, 3, 4, 5, 6])
 
     
-@app.route('/api/mixes/<id>')
+@app.route('/api/mix/<id>')
 def mix(id):
   def chan(id):
     return {
       "id": id,
-      "on":False,
-      "image": "https://api.adorable.io/avatars/285/channel-{}.png".format(id)
+      "on":random.choice([True, False]),
+      "image": "https://api.adorable.io.crap/avatars/285/channel-{}.png".format(id)
     }
   
-  return jsonify([chan(id) for id in range(0, 48)])
+  return jsonify([chan(id) for id in range(0, 10)])
 
 
 if __name__ == '__main__':

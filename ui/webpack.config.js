@@ -15,6 +15,13 @@ module.exports = {
   module: {
     rules: [
       {
+        test: /\.(css|scss)$/,
+        loaders: [
+          'style-loader',
+          'css-loader',
+        ]
+      },
+      {
         test:    /\.html$/,
         exclude: /node_modules/,
         loader:  'file-loader?name=[name].[ext]',

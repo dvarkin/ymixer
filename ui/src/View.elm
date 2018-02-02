@@ -23,7 +23,7 @@ view model =
         Nothing ->
           ( "Mixer", [] )
   in   
-    Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
+    --Material.Scheme.topWithScheme Color.Teal Color.LightGreen <|
       Layout.render Mdl 
         model.mdl 
         [ Layout.fixedHeader

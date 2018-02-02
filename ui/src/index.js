@@ -1,6 +1,7 @@
 'use strict';
 
 import './index.html'
+import './material.css'
 import {uploadImage} from './uploader'
 
 var Elm = require('./Main.elm');
