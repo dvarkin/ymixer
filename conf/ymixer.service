@@ -1,0 +1,14 @@
+[Unit]
+Description=ymixer service
+After=network.target
+
+[Service]
+ExecStart=/usr/local/ymixer/bin/ymixer_release start
+WorkingDirectory=/usr/local/ymixer/
+StandardOutput=inherit
+StandardError=inherit
+Restart=always
+User=pi
+
+[Install]
+WantedBy=multi-user.target
