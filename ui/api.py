@@ -24,7 +24,7 @@ def mix(id):
     return {
       "id": id,
       "on":random.choice([True, False]),
-      "image": "https://api.adorable.io.crap/avatars/285/channel-{}.png".format(id)
+      "image": "https://api.adorable.io/avatars/285/channel-{}.png".format(id)
     }
   
   return jsonify([chan(id) for id in range(0, 10)])
