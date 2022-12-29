@@ -12,12 +12,12 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "css-loader": "^0.28.9",
+    "css-loader": "^6.7.3",
     "del-cli": "^1.1.0",
-    "elm-webpack-loader": "^4.4.0",
-    "file-loader": "^1.1.6",
-    "style-loader": "^0.20.1",
-    "webpack": "^3.10.0",
+    "elm-webpack-loader": "^8.0.0",
+    "file-loader": "^6.2.0",
+    "style-loader": "^3.3.1",
+    "webpack": "^5.75.0",
     "webpack-dev-server": "^2.11.0"
   },
   "dependencies": {}
